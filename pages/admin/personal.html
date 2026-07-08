@@ -19,6 +19,7 @@
 
     <script src="https://unpkg.com/lucide@latest"></script>
 
+    /* Estilos para el modal de edición */
     <style>
         .form-grid {
             display: grid;
@@ -245,7 +246,7 @@
 
         function cargarPersonal() {
             const tbody = document.getElementById('tabla-personal');
-            // Solo se lista al personal (no a los clientes)
+            // Solo se lista al personal no a los clientes
             const data = StorageService.getAll('usuarios').filter(u => u.rol !== 'cliente');
 
             if (!data.length) {
@@ -253,7 +254,7 @@
                 return;
             }
             tbody.innerHTML = data.map(u => {
-                const activo = u.activo !== false; // por defecto activo si no se definió
+                const activo = u.activo !== false;
                 const esAdmin = u.rol === 'administrador';
                 return `
             <tr>
@@ -359,7 +360,7 @@
         cargarClientes();
         if (window.lucide) lucide.createIcons();
 
-        // Si un cliente se registra en otra pestaña (register.html), esta vista se refresca sola.
+        // Si un cliente se registra en otra pestaña esta vista se refresca sola.
         window.addEventListener('storage', (e) => {
             if (e.key === 'usuarios') {
                 cargarPersonal();
