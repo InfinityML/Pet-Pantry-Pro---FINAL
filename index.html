@@ -1,31 +1,36 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pet Pantry Pro | Plataforma Integral Veterinaria y Social</title>
-    <meta name="description" content="Software de gestión clínica veterinaria y programa de asistencia social animal.">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap-grid.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap-utilities.min.css" rel="stylesheet">
     
+    <meta name="description" content="Software de gestión clínica veterinaria y programa de asistencia social animal.">
+
     <!-- Rutas directas desde la raíz -->
     <link rel="stylesheet" href="src/css/base/reset.css">
     <link rel="stylesheet" href="src/css/base/variables.css">
     <link rel="stylesheet" href="src/css/base/typography.css">
     <link rel="stylesheet" href="src/css/components/buttons.css">
     <link rel="stylesheet" href="src/css/pages/landing.css">
-    
+
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
+
 <body>
     <!-- Navegación Pública Unificada -->
     <header class="navbar">
         <div class="nav-container">
-            
+
             <a href="index.html" class="brand" aria-label="Ir al inicio">
                 <i data-lucide="paw-print" class="brand-icon"></i>
                 <span>Pet Pantry Pro</span>
             </a>
-            
-            <!-- MENÚ UNIFICADO: 4 Apartados -->
+
+            <!-- Top Apartados -->
             <nav class="nav-links" aria-label="Navegación principal">
                 <a href="#" class="link">Inicio</a>
                 <a href="#mision" class="link">Nuestra Misión</a>
@@ -35,17 +40,17 @@
             </nav>
             <!-- Derecha: Botón y Login -->
             <div class="nav-actions">
-                
+
                 <!-- Botón de Adopción blindado -->
                 <a href="#adoptar-pasos" class="btn-ayuda">
                     <i data-lucide="paw-print" width="20" height="20" style="flex-shrink: 0;"></i> Quiero Adoptar
                 </a>
-                
+
                 <!-- Enlace de Login blindado -->
                 <a href="pages/auth/login.html" class="login-link">
                     <i data-lucide="user" width="20" height="20" style="flex-shrink: 0;"></i> Iniciar Sesión
                 </a>
-                
+
             </div>
 
         </div>
@@ -61,10 +66,10 @@
                     </span>
                     <h1>Sanamos mascotas.<br>Restauramos familias.</h1>
                     <p class="text-muted">
-                        Somos más que una clínica veterinaria. Somos una comunidad dedicada a brindar 
+                        Somos más que una clínica veterinaria. Somos una comunidad dedicada a brindar
                         atención de primer nivel y conectar peludos rescatados con hogares llenos de amor.
                     </p>
-                    
+
                     <!-- BOTONES CORREGIDOS: Menos redundantes, más orientados a la acción -->
                     <div class="hero-buttons">
                         <a href="pages/public/catalog.html" class="btn btn-primary">
@@ -75,10 +80,10 @@
                         </a>
                     </div>
                 </div>
-                
+
                 <div class="hero-visual">
-                    <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?q=80&w=800&auto=format&fit=crop" 
-                         alt="Perro feliz siendo atendido" loading="lazy" class="hero-image">
+                    <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?q=80&w=800&auto=format&fit=crop"
+                        alt="Perro feliz siendo atendido" loading="lazy" class="hero-image">
                 </div>
             </div>
         </section>
@@ -104,8 +109,8 @@
             <div class="section-container" style="text-align: center; max-width: 800px;">
                 <h2 style="color: var(--color-primary-600); margin-bottom: 16px;">Nuestra Misión</h2>
                 <p class="text-muted" style="font-size: 1.125rem; line-height: 1.8;">
-                    En Pet Pantry Pro creemos que cada animal merece respeto, salud y una familia. 
-                    Nuestro ecosistema permite que las ganancias de nuestra clínica privada 
+                    En Pet Pantry Pro creemos que cada animal merece respeto, salud y una familia.
+                    Nuestro ecosistema permite que las ganancias de nuestra clínica privada
                     financien el rescate, rehabilitación y alimentación de animales en estado de abandono.
                 </p>
             </div>
@@ -113,63 +118,88 @@
 
         <!-- NUEVA SECCIÓN: Fondo Social y Donaciones -->
         <section id="fondo-social" class="content-section" style="background-color: var(--color-primary-50);">
-            <div class="section-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-12); align-items: center;">
-                
+            <div class="section-container"
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-12); align-items: center;">
+
                 <!-- Columna Izquierda: Texto y Donación Rápida -->
                 <div>
                     <span class="pill-badge" style="background: var(--color-white);">Fondo Social</span>
-                    <h2 style="margin-top: 16px; margin-bottom: 16px; color: var(--color-slate-900); font-size: 2.25rem;">Ayúdanos a seguir salvando vidas</h2>
+                    <h2
+                        style="margin-top: 16px; margin-bottom: 16px; color: var(--color-slate-900); font-size: 2.25rem;">
+                        Ayúdanos a seguir salvando vidas</h2>
                     <p class="text-muted" style="margin-bottom: 24px; line-height: 1.7; font-size: 1.125rem;">
-                        Nuestra clínica privada cubre gran parte de los gastos operativos, pero con tu aporte voluntario podemos extender nuestra ayuda a casos críticos de abandono, financiar cirugías complejas y comprar alimento.
+                        Nuestra clínica privada cubre gran parte de los gastos operativos, pero con tu aporte voluntario
+                        podemos extender nuestra ayuda a casos críticos de abandono, financiar cirugías complejas y
+                        comprar alimento.
                     </p>
-                    
-                    <h4 style="margin-bottom: 16px; color: var(--color-slate-800); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Métodos de donación aceptados:</h4>
-                    
+
+                    <h4
+                        style="margin-bottom: 16px; color: var(--color-slate-800); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">
+                        Métodos de donación aceptados:</h4>
+
                     <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
-                        
+
                         <!-- Tarjeta Yape -->
-                        <div style="background-color: var(--color-white); border: 1px solid var(--color-slate-200); border-radius: 8px; padding: 4px 16px; display: flex; align-items: center; justify-content: center; height: 48px; min-width: 80px; box-shadow: var(--shadow-sm);">
-                            <img src="/src/img/yape.png" alt="Yape" style="max-height: 26px; width: auto; object-fit: contain;">
+                        <div
+                            style="background-color: var(--color-white); border: 1px solid var(--color-slate-200); border-radius: 8px; padding: 4px 16px; display: flex; align-items: center; justify-content: center; height: 48px; min-width: 80px; box-shadow: var(--shadow-sm);">
+                            <img src="/src/img/yape.png" alt="Yape"
+                                style="max-height: 26px; width: auto; object-fit: contain;">
                         </div>
-                        
+
                         <!-- Tarjeta Plin -->
-                        <div style="background-color: var(--color-white); border: 1px solid var(--color-slate-200); border-radius: 8px; padding: 4px 16px; display: flex; align-items: center; justify-content: center; height: 48px; min-width: 80px; box-shadow: var(--shadow-sm);">
-                            <img src="/src/img/plin.png" alt="Plin" style="max-height: 26px; width: auto; object-fit: contain;">
+                        <div
+                            style="background-color: var(--color-white); border: 1px solid var(--color-slate-200); border-radius: 8px; padding: 4px 16px; display: flex; align-items: center; justify-content: center; height: 48px; min-width: 80px; box-shadow: var(--shadow-sm);">
+                            <img src="/src/img/plin.png" alt="Plin"
+                                style="max-height: 26px; width: auto; object-fit: contain;">
                         </div>
 
                         <!-- Tarjeta Visa -->
-                        <div style="background-color: var(--color-white); border: 1px solid var(--color-slate-200); border-radius: 8px; padding: 4px 16px; display: flex; align-items: center; justify-content: center; height: 48px; min-width: 80px; box-shadow: var(--shadow-sm);">
-                            <img src="/src/img/visa.png" alt="Visa" style="max-height: 20px; width: auto; object-fit: contain;">
+                        <div
+                            style="background-color: var(--color-white); border: 1px solid var(--color-slate-200); border-radius: 8px; padding: 4px 16px; display: flex; align-items: center; justify-content: center; height: 48px; min-width: 80px; box-shadow: var(--shadow-sm);">
+                            <img src="/src/img/visa.png" alt="Visa"
+                                style="max-height: 20px; width: auto; object-fit: contain;">
                         </div>
 
                         <!-- Tarjeta Mastercard -->
-                        <div style="background-color: var(--color-white); border: 1px solid var(--color-slate-200); border-radius: 8px; padding: 4px 16px; display: flex; align-items: center; justify-content: center; height: 48px; min-width: 80px; box-shadow: var(--shadow-sm);">
-                            <img src="/src/img/mastercard.png" alt="Mastercard" style="max-height: 26px; width: auto; object-fit: contain;">
+                        <div
+                            style="background-color: var(--color-white); border: 1px solid var(--color-slate-200); border-radius: 8px; padding: 4px 16px; display: flex; align-items: center; justify-content: center; height: 48px; min-width: 80px; box-shadow: var(--shadow-sm);">
+                            <img src="/src/img/mastercard.png" alt="Mastercard"
+                                style="max-height: 26px; width: auto; object-fit: contain;">
                         </div>
-                        
+
                     </div>
 
                     <!-- Mensaje de transparencia -->
-                    <div style="margin-top: 24px; display: inline-flex; align-items: center; gap: 8px; background: var(--color-white); padding: 8px 16px; border-radius: var(--radius-full); border: 1px solid var(--color-slate-200);">
+                    <div
+                        style="margin-top: 24px; display: inline-flex; align-items: center; gap: 8px; background: var(--color-white); padding: 8px 16px; border-radius: var(--radius-full); border: 1px solid var(--color-slate-200);">
                         <span style="position: relative; display: flex; width: 10px; height: 10px;">
-                          <span style="animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite; position: absolute; display: inline-flex; height: 100%; width: 100%; border-radius: 50%; background-color: var(--color-primary-400); opacity: 0.75;"></span>
-                          <span style="position: relative; display: inline-flex; border-radius: 50%; height: 10px; width: 10px; background-color: var(--color-primary-600);"></span>
+                            <span
+                                style="animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite; position: absolute; display: inline-flex; height: 100%; width: 100%; border-radius: 50%; background-color: var(--color-primary-400); opacity: 0.75;"></span>
+                            <span
+                                style="position: relative; display: inline-flex; border-radius: 50%; height: 10px; width: 10px; background-color: var(--color-primary-600);"></span>
                         </span>
-                        <p class="text-small text-muted" style="margin: 0;">Pasarela de pagos en construcción. ¡Pronto habilitaremos las transferencias directas!</p>
+                        <p class="text-small text-muted" style="margin: 0;">Pasarela de pagos en construcción. ¡Pronto
+                            habilitaremos las transferencias directas!</p>
                     </div>
                 </div>
 
                 <!-- Columna Derecha: Tarjeta para crear cuenta de Donante -->
-                <div style="background: var(--color-white); padding: var(--space-8); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); text-align: center; border: 1px solid var(--color-primary-100);">
-                    <div style="width: 64px; height: 64px; background: var(--color-primary-50); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto;">
-                        <i data-lucide="heart-handshake" style="width: 32px; height: 32px; color: var(--color-primary-600);"></i>
+                <div
+                    style="background: var(--color-white); padding: var(--space-8); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); text-align: center; border: 1px solid var(--color-primary-100);">
+                    <div
+                        style="width: 64px; height: 64px; background: var(--color-primary-50); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto;">
+                        <i data-lucide="heart-handshake"
+                            style="width: 32px; height: 32px; color: var(--color-primary-600);"></i>
                     </div>
                     <h3 style="margin-bottom: 12px; font-size: 1.5rem;">Hazte Padrino Mensual</h3>
                     <p class="text-small text-muted" style="margin-bottom: 24px; line-height: 1.6;">
-                        Únete a nuestra comunidad de padrinos. Aporta una cuota fija mensual y recibe actualizaciones exclusivas con fotos y videos de los peludos que estás ayudando a rehabilitar.
+                        Únete a nuestra comunidad de padrinos. Aporta una cuota fija mensual y recibe actualizaciones
+                        exclusivas con fotos y videos de los peludos que estás ayudando a rehabilitar.
                     </p>
                     <!-- Este botón lleva al Login/Registro para que el sistema capture sus datos -->
-                    <a href="pages/auth/register.html" class="btn btn-outline" style="width: 100%; border-color: var(--color-primary-600); color: var(--color-primary-600);">Crear cuenta</a>
+                    <a href="pages/auth/register.html" class="btn btn-outline"
+                        style="width: 100%; border-color: var(--color-primary-600); color: var(--color-primary-600);">Crear
+                        cuenta</a>
                 </div>
 
             </div>
@@ -180,23 +210,27 @@
             <div class="section-container">
                 <div class="section-header">
                     <h2>Servicios Veterinarios de Primer Nivel</h2>
-                    <p class="text-muted">Con cada consulta privada, ayudas a sostener nuestro fondo social para animales rescatados.</p>
+                    <p class="text-muted">Con cada consulta privada, ayudas a sostener nuestro fondo social para
+                        animales rescatados.</p>
                 </div>
                 <div class="services-grid">
                     <div class="service-card">
                         <div class="icon-box"><i data-lucide="stethoscope"></i></div>
                         <h3>Medicina General</h3>
-                        <p class="text-muted text-small">Consultas preventivas, diagnósticos precisos y tratamientos para mantener a tu mascota sana.</p>
+                        <p class="text-muted text-small">Consultas preventivas, diagnósticos precisos y tratamientos
+                            para mantener a tu mascota sana.</p>
                     </div>
                     <div class="service-card">
                         <div class="icon-box"><i data-lucide="syringe"></i></div>
                         <h3>Vacunación y Desparasitación</h3>
-                        <p class="text-muted text-small">Esquemas completos de inmunización para protegerlos de enfermedades virales y parásitos.</p>
+                        <p class="text-muted text-small">Esquemas completos de inmunización para protegerlos de
+                            enfermedades virales y parásitos.</p>
                     </div>
                     <div class="service-card">
                         <div class="icon-box"><i data-lucide="activity"></i></div>
                         <h3>Cirugía y Emergencias</h3>
-                        <p class="text-muted text-small">Quirófano equipado y personal capacitado para intervenciones seguras y atención prioritaria.</p>
+                        <p class="text-muted text-small">Quirófano equipado y personal capacitado para intervenciones
+                            seguras y atención prioritaria.</p>
                     </div>
                 </div>
             </div>
@@ -207,23 +241,27 @@
             <div class="section-container">
                 <div class="section-header">
                     <h2>Dale una segunda oportunidad</h2>
-                    <p class="text-muted">El proceso de adopción está diseñado para asegurar el bienestar de nuestros peludos.</p>
+                    <p class="text-muted">El proceso de adopción está diseñado para asegurar el bienestar de nuestros
+                        peludos.</p>
                 </div>
                 <div class="steps-grid">
                     <div class="step-item">
                         <div class="step-number">1</div>
                         <h3>Elige con el corazón</h3>
-                        <p class="text-muted text-small">Explora nuestro catálogo público y encuentra a la mascota que conecte contigo.</p>
+                        <p class="text-muted text-small">Explora nuestro catálogo público y encuentra a la mascota que
+                            conecte contigo.</p>
                     </div>
                     <div class="step-item">
                         <div class="step-number">2</div>
                         <h3>Envía tu postulación</h3>
-                        <p class="text-muted text-small">Llena el formulario con tus datos. Nuestro equipo evaluará tu perfil para asegurar un buen hogar.</p>
+                        <p class="text-muted text-small">Llena el formulario con tus datos. Nuestro equipo evaluará tu
+                            perfil para asegurar un buen hogar.</p>
                     </div>
                     <div class="step-item">
                         <div class="step-number">3</div>
                         <h3>Bienvenido a casa</h3>
-                        <p class="text-muted text-small">Firma el acta de compromiso y llévate a tu nuevo mejor amigo con su primera revisión gratis.</p>
+                        <p class="text-muted text-small">Firma el acta de compromiso y llévate a tu nuevo mejor amigo
+                            con su primera revisión gratis.</p>
                     </div>
                 </div>
             </div>
@@ -239,7 +277,8 @@
                     <span style="font-size: 1.25rem; font-weight: 700;">Pet Pantry Pro</span>
                 </div>
                 <p class="text-small" style="color: var(--color-slate-400); max-width: 300px;">
-                    Plataforma integral que une la excelencia médica veterinaria con el compromiso social de rescatar y rehabilitar.
+                    Plataforma integral que une la excelencia médica veterinaria con el compromiso social de rescatar y
+                    rehabilitar.
                 </p>
             </div>
             <div class="footer-links">
@@ -250,9 +289,12 @@
             </div>
             <div class="footer-contact">
                 <h4>Contacto</h4>
-                <p class="text-small" style="color: var(--color-slate-400);"><i data-lucide="map-pin" style="width: 14px; height: 14px; margin-right: 4px;"></i> Av. Los Caninos 123, Lima</p>
-                <p class="text-small" style="color: var(--color-slate-400);"><i data-lucide="phone" style="width: 14px; height: 14px; margin-right: 4px;"></i> +51 987 654 321</p>
-                <p class="text-small" style="color: var(--color-slate-400);"><i data-lucide="mail" style="width: 14px; height: 14px; margin-right: 4px;"></i> ayuda@petpantry.pe</p>
+                <p class="text-small" style="color: var(--color-slate-400);"><i data-lucide="map-pin"
+                        style="width: 14px; height: 14px; margin-right: 4px;"></i> Av. Los Caninos 123, Lima</p>
+                <p class="text-small" style="color: var(--color-slate-400);"><i data-lucide="phone"
+                        style="width: 14px; height: 14px; margin-right: 4px;"></i> +51 987 654 321</p>
+                <p class="text-small" style="color: var(--color-slate-400);"><i data-lucide="mail"
+                        style="width: 14px; height: 14px; margin-right: 4px;"></i> ayuda@petpantry.pe</p>
             </div>
         </div>
         <div class="footer-bottom">
@@ -264,4 +306,5 @@
     <script type="module" src="src/js/app.js"></script>
     <script>lucide.createIcons();</script>
 </body>
+
 </html>
