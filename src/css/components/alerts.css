@@ -1,0 +1,61 @@
+/* ==========================================================================
+   UI COMPONENT: ALERTS & NOTIFICATIONS
+   ========================================================================== */
+
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-4);
+  border: 1px solid transparent;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.alert-icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+}
+
+.alert-content {
+  flex-grow: 1;
+}
+
+.alert-title {
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+/* Variantes Semánticas */
+.alert-warning {
+  background-color: var(--color-warning-100);
+  color: #b45309; /* Texto advertencia accesible */
+  border-color: #fde68a;
+}
+
+.alert-warning .alert-icon {
+  color: var(--color-warning-600);
+}
+
+.alert-danger {
+  background-color: var(--color-danger-100);
+  color: #991b1b;
+  border-color: #fecaca;
+}
+
+.alert-danger .alert-icon {
+  color: var(--color-danger-600);
+}
+
+.alert-success {
+  background-color: var(--color-success-100);
+  color: #065f46;
+  border-color: #a7f3d0;
+}
+
+.alert-success .alert-icon {
+  color: var(--color-success-600);
+}

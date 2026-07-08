@@ -1,0 +1,62 @@
+/* ==========================================================================
+   MODERN CSS RESET & ACCESSIBILITY BASE
+   ========================================================================== */
+
+/* 1. Box-sizing uniforme */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* 2. Scroll suave y configuración de alto */
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--color-slate-50);
+  color: var(--color-slate-700);
+  text-rendering: optimizeSpeed;
+  overflow-x: hidden;
+}
+
+/* 3. Listas limpias */
+ul, ol {
+  list-style: none;
+}
+
+/* 4. Imágenes y multimedia responsivas */
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* 5. Controles de formulario heredan tipografía */
+input, button, textarea, select {
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+/* 6. Enlaces limpios */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* 7. ACCESIBILIDAD (WCAG): Foco visible para navegación por teclado */
+:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+}
+
+/* Evitar outline en clics de ratón, mantenerlo solo para teclado */
+:focus:not(:focus-visible) {
+  outline: none;
+}

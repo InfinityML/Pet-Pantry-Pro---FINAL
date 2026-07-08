@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Adopciones | Pet Pantry Pro</title>
+
+    <link rel="stylesheet" href="../../src/css/base/reset.css">
+    <link rel="stylesheet" href="../../src/css/base/variables.css">
+    <link rel="stylesheet" href="../../src/css/base/typography.css">
+    <link rel="stylesheet" href="../../src/css/layouts/app-layout.css">
+    <link rel="stylesheet" href="../../src/css/layouts/sidebar.css">
+    <link rel="stylesheet" href="../../src/css/layouts/topbar.css">
+
+    <link rel="stylesheet" href="../../src/css/components/cards.css">
+    <link rel="stylesheet" href="../../src/css/components/forms.css">
+    <link rel="stylesheet" href="../../src/css/components/buttons.css">
+    <link rel="stylesheet" href="../../src/css/components/badges.css">
+    <link rel="stylesheet" href="../../src/css/components/file-upload.css">
+    <link rel="stylesheet" href="../../src/css/components/tables.css">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Estilos para el modal de edición */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-wrapper">
+
+        <aside class="app-sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <i data-lucide="paw-print" class="sidebar-brand"></i>
+                <span class="sidebar-brand">PetPantry Pro</span>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-item"><a href="panel-admin.html" class="nav-link"><i data-lucide="layout-dashboard"></i>
+                        Resumen</a></div>
+                <div class="nav-item"><a href="adopciones.html" class="nav-link active"><i data-lucide="bone"></i>
+                        Adopciones</a></div>
+                <div class="nav-item"><a href="productos.html" class="nav-link"><i data-lucide="shopping-bag"></i>
+                        Productos</a></div>
+                <div class="nav-item"><a href="personal.html" class="nav-link"><i data-lucide="users"></i> Personal</a>
+                </div>
+                <div class="nav-item"><a href="reportes.html" class="nav-link"><i data-lucide="bar-chart-3"></i> Reportes</a>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../auth/login.html" class="nav-link text-danger"><i data-lucide="log-out"></i> Cerrar
+                    Sesión</a>
+            </div>
+        </aside>
+
+        <header class="app-topbar">
+            <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú"><i data-lucide="menu"></i></button>
+            <div class="user-profile">
+                <div class="user-info">
+                    <span class="user-name">Dr. Carlos Vise</span>
+                    <span class="user-role">Administrador</span>
+                </div>
+                <div class="user-avatar">CV</div>
+            </div>
+        </header>
+
+        <main class="app-main">
+            <div class="content-area">
+
+                <header style="margin-bottom: var(--space-8);">
+                    <h1>Gestión de Adopciones</h1>
+                    <p class="text-muted">Publica nuevas mascotas y gestiona el catálogo público.</p>
+                </header>
+
+                <div class="card" style="margin-bottom: var(--space-8);">
+                    <div class="card-header">
+                        <h3 class="card-title"
+                            style="display:flex; align-items:center; gap:8px; color: var(--color-primary-600);">
+                            <i data-lucide="image-plus"></i> Publicar Nueva Mascota
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- EL FORMULARIO AHORA SOPORTA ARCHIVOS -->
+                        <form id="form-adopcion" enctype="multipart/form-data">
+                            <div
+                                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--space-4);">
+                                <div class="form-group"><label class="form-label">Nombre de la mascota</label><input
+                                        type="text" id="mascota-nombre" class="form-control" required
+                                        placeholder="Ej. Max"></div>
+                                <div class="form-group"><label class="form-label">Edad estimada</label><input
+                                        type="text" id="mascota-edad" class="form-control" required
+                                        placeholder="Ej. 3 meses"></div>
+                                <div class="form-group"><label class="form-label">Raza / Cruce</label><input type="text"
+                                        id="mascota-raza" class="form-control" placeholder="Mestizo"></div>
+                                <div class="form-group"><label class="form-label">Tamaño</label>
+                                    <select id="mascota-tamano" class="form-control" required>
+                                        <option value="" disabled selected>Seleccione...</option>
+                                        <option value="Pequeño">Pequeño</option>
+                                        <option value="Mediano">Mediano</option>
+                                        <option value="Grande">Grande</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="file-upload-wrapper" style="margin-top: var(--space-4);">
+                                <div class="form-group">
+                                    <label class="form-label">Fotografía (PNG/JPG)</label>
+                                    <!-- INPUT TIPO FILE EN LUGAR DE URL -->
+                                    <input type="file" id="mascota-foto" class="form-control" accept="image/*" required
+                                        style="padding: 8px;">
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="margin-top: var(--space-4); margin-bottom: var(--space-4);">
+                                <label class="form-label">Temperamento / Historia</label>
+                                <textarea id="mascota-historia" class="form-control" rows="3" required
+                                    placeholder="Breve descripción del animal..."></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary"><i data-lucide="globe"></i> Publicar en
+                                Catálogo Público</button>
+                        </form>
+                    </div>
+                </div>
+
+                <h3 style="margin-bottom: var(--space-4);">Mascotas Públicas</h3>
+
+                <!-- EL GRID DE MASCOTAS -->
+                <div id="grid-adopciones"
+                    style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--space-6);">
+                </div>
+
+                <!-- TABLA DE POSTULACIONES (Se mantiene igual) -->
+                <div class="card" style="margin-top: var(--space-8);">
+                    <div class="card-header">
+                        <h3 class="card-title">Bandeja de Postulaciones</h3>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Mascota</th>
+                                    <th>Adoptante</th>
+                                    <th>DNI</th>
+                                    <th>Motivo</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabla-postulaciones">
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted" style="padding:24px;">Cargando...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    </div>
+
+    <!-- MODAL DE EDICIÓN DE MASCOTA -->
+    <div class="modal-overlay" id="modalEditarMascota">
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 style="margin:0;">Editar Mascota</h3>
+                <button onclick="cerrarModalMascota()" style="background:none; border:none; cursor:pointer;"><i
+                        data-lucide="x"></i></button>
+            </div>
+
+            <form id="form-editar-mascota" enctype="multipart/form-data">
+                <input type="hidden" id="edit-id">
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                    <div class="form-group"><label class="form-label">Nombre</label><input type="text" id="edit-nombre"
+                            class="form-control" required></div>
+                    <div class="form-group"><label class="form-label">Edad</label><input type="text" id="edit-edad"
+                            class="form-control" required></div>
+                    <div class="form-group"><label class="form-label">Raza</label><input type="text" id="edit-raza"
+                            class="form-control" required></div>
+                    <div class="form-group"><label class="form-label">Tamaño</label>
+                        <select id="edit-tamano" class="form-control" required>
+                            <option value="Pequeño">Pequeño</option>
+                            <option value="Mediano">Mediano</option>
+                            <option value="Grande">Grande</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label class="form-label">Estado</label>
+                    <select id="edit-estado" class="form-control" required>
+                        <option value="Disponible">Disponible</option>
+                        <option value="En Proceso">En Proceso</option>
+                        <option value="Adoptado">Adoptado</option>
+                    </select>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label class="form-label">Actualizar Fotografía (Opcional)</label>
+                    <input type="file" id="edit-foto" class="form-control" accept="image/*" style="padding: 8px;">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 24px;">
+                    <label class="form-label">Historia</label>
+                    <textarea id="edit-historia" class="form-control" rows="3" required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Guardar Cambios</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="../../src/js/utils/toast.js"></script>
+    <script type="module" src="../../src/js/layouts/main-layout.js"></script>
+    <script type="module" src="../../src/js/pages/admin-adopciones.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+
+</html>

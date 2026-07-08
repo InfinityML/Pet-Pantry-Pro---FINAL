@@ -1,0 +1,380 @@
+html {
+    overflow-y: scroll;
+    scroll-behavior: smooth; /* Deslizamiento suave, como en páginas premium */
+    scroll-padding-top: 100px; /* Crea un margen invisible para que el menú no tape los títulos */
+}
+
+.navbar {
+    background-color: var(--color-white);
+    border-bottom: 1px solid var(--color-slate-100);
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky);
+    height: 80px;
+    display: flex;
+    align-items: center;
+    box-shadow: var(--shadow-sm);
+}
+
+.nav-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-6);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* 1. Izquierda: Logo */
+.brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-slate-900);
+    flex: 1; 
+}
+.brand-icon {
+    color: var(--color-primary-600);
+}
+
+/* 2. Centro: Enlaces neutros y elegantes */
+.nav-links {
+    display: none; 
+    gap: var(--space-6); /* Reduje un poquito el gap de 8 a 6 para que todo entre perfecto */
+    flex: 2;
+    justify-content: center;
+    margin-right: var(--space-8); /* Separa los enlaces del botón "Quiero Adoptar" y los corre a la izquierda */
+}
+.nav-links .link {
+    color: var(--color-slate-700); /* Gris oscuro neutro */
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: color var(--transition-fast);
+    white-space: nowrap; /* ESTA ES LA REGLA QUE PROHÍBE QUE SE PARTAN EN DOS LÍNEAS */
+}
+.nav-links .link:hover {
+    color: var(--color-primary-600); /* Naranja solo al pasar el mouse */
+}
+
+/* 3. Derecha: Acciones */
+.nav-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--space-6);
+    flex: 1;
+}
+
+/* Botón "Ayuda Aquí" (Proporcionado y sin romperse) */
+.btn-ayuda {
+    background-color: var(--color-primary-600);
+    color: var(--color-white);
+    padding: 0.5rem 1.25rem;
+    border-radius: var(--radius-full);
+    font-weight: 600;
+    font-size: 0.875rem;
+    display: inline-flex; /* Mantiene ícono y texto alineados */
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap; /* EVITA QUE SE PARTA EN DOS LÍNEAS */
+    transition: all var(--transition-fast);
+}
+.btn-ayuda:hover {
+    background-color: var(--color-primary-700);
+    transform: translateY(-2px);
+    color: var(--color-white);
+}
+
+/* Enlace "Iniciar Sesión" (Limpio y en una sola línea) */
+.login-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-slate-700); /* Gris oscuro para no competir con el botón */
+    font-weight: 600;
+    font-size: 0.9rem;
+    white-space: nowrap; /* EVITA QUE SE PARTA EN DOS LÍNEAS */
+    transition: color var(--transition-fast);
+}
+.login-link:hover {
+    color: var(--color-primary-600);
+}
+
+
+/* --- Hero Section --- */
+.hero {
+    max-width: 100%;
+    background: linear-gradient(135deg, var(--color-primary-50) 0%, var(--color-white) 100%);
+    padding: var(--space-12) var(--space-6);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-12);
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    left: -50px;
+    width: 200px;
+    height: 200px;
+    background-image: radial-gradient(var(--color-primary-100) 2px, transparent 2px);
+    background-size: 20px 20px;
+    opacity: 0.5;
+    z-index: 0;
+}
+
+.pill-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0.25rem 0.75rem;
+    background-color: var(--color-primary-50);
+    color: var(--color-primary-600);
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: var(--space-4);
+    border: 1px solid var(--color-primary-100);
+}
+
+.hero-content h1 {
+    font-size: clamp(2.5rem, 5vw, 4rem); 
+    margin-bottom: var(--space-6);
+}
+
+.hero-content p {
+    font-size: 1.125rem;
+    line-height: 1.7;
+    margin-bottom: var(--space-8);
+    max-width: 500px;
+}
+
+.hero-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+}
+
+.hero-image {
+    width: 100%;
+    border-radius: 24px;
+    box-shadow: var(--shadow-lg);
+    object-fit: cover;
+    aspect-ratio: 4/3;
+}
+
+/* --- Seccion Stats --- */
+.stats-section {
+    max-width: 1200px;
+    margin: 0 auto var(--space-16) auto;
+    padding: 0 var(--space-6);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-6);
+    text-align: center;
+}
+
+.stat-card {
+    padding: var(--space-6);
+    background: var(--color-white);
+    border: 1px solid var(--color-slate-200);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md); 
+}
+
+.stat-card h2 {
+    color: var(--color-primary-600);
+    margin-bottom: var(--space-2);
+}
+
+/* --- Responsive Desktop --- */
+@media (min-width: 768px) {
+    .nav-links {
+        display: flex;
+    }
+    .hero-container {
+        grid-template-columns: 1fr 1fr;
+    }
+    .hero {
+        padding: var(--space-16) var(--space-6);
+    }
+}
+
+/* ==========================================================================
+   NUEVAS SECCIONES: CUERPO Y FOOTER
+   ========================================================================== */
+
+.content-section {
+    padding: var(--space-16) var(--space-6);
+}
+
+.bg-light {
+    background-color: var(--color-slate-50);
+}
+
+.section-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: var(--space-12);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.section-header h2 {
+    font-size: 2.25rem;
+    color: var(--color-slate-900);
+    margin-bottom: var(--space-4);
+}
+
+/* --- Grid de Servicios --- */
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-8);
+}
+
+.service-card {
+    background: var(--color-white);
+    padding: var(--space-8);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-slate-200);
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+.icon-box {
+    width: 48px;
+    height: 48px;
+    background-color: var(--color-primary-50);
+    color: var(--color-primary-600);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-4);
+}
+
+.service-card h3 {
+    margin-bottom: var(--space-2);
+    color: var(--color-slate-900);
+}
+
+/* --- Grid de Pasos --- */
+.steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-8);
+    text-align: center;
+}
+
+.step-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.step-number {
+    width: 64px;
+    height: 64px;
+    background-color: var(--color-primary-600);
+    color: var(--color-white);
+    font-size: 1.5rem;
+    font-weight: 700;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-6);
+    box-shadow: 0 0 0 8px var(--color-primary-50);
+}
+
+.step-item h3 {
+    margin-bottom: var(--space-2);
+}
+
+/* --- Footer Premium --- */
+.site-footer {
+    background-color: var(--color-slate-900);
+    color: var(--color-slate-300);
+    padding-top: var(--space-16);
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-6) var(--space-12) var(--space-6);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-8);
+}
+
+.footer-links h4, .footer-contact h4 {
+    color: var(--color-white);
+    margin-bottom: var(--space-4);
+    font-size: 1.125rem;
+}
+
+/* Alinea ícono + texto en la misma línea dentro de Contacto */
+.footer-contact p {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: var(--space-2);
+}
+
+.footer-contact p i,
+.footer-contact p svg {
+    flex-shrink: 0;
+}
+
+.footer-links a {
+    display: block;
+    color: var(--color-slate-400);
+    margin-bottom: var(--space-2);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.footer-links a:hover {
+    color: var(--color-primary-400);
+}
+
+.footer-bottom {
+    background-color: #0f172a; /* Slate 950 */
+    text-align: center;
+    padding: var(--space-6);
+    font-size: 0.875rem;
+    color: var(--color-slate-500);
+    border-top: 1px solid var(--color-slate-800);
+}
+
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}

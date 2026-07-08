@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo y Tienda | Pet Pantry Pro</title>
+
+    <!-- Rutas exactas -->
+    <link rel="stylesheet" href="../../src/css/base/reset.css">
+    <link rel="stylesheet" href="../../src/css/base/variables.css">
+    <link rel="stylesheet" href="../../src/css/base/typography.css">
+    <link rel="stylesheet" href="../../src/css/components/buttons.css">
+    <link rel="stylesheet" href="../../src/css/components/cards.css">
+    <link rel="stylesheet" href="../../src/css/components/badges.css">
+    <link rel="stylesheet" href="../../src/css/components/forms.css">
+    <link rel="stylesheet" href="../../src/css/components/modals.css">
+    <link rel="stylesheet" href="../../src/css/pages/landing.css">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body style="background-color: var(--color-slate-50);">
+
+    <header class="navbar">
+        <div class="nav-container">
+
+            <a href="../../index.html" class="brand" aria-label="Ir al inicio">
+                <i data-lucide="paw-print" class="brand-icon"></i>
+                <span>Pet Pantry Pro</span>
+            </a>
+
+            <nav class="nav-links" aria-label="Navegación principal">
+                <a href="../../index.html" class="link">Inicio</a>
+
+                <a href="../../index.html#mision" class="link">Nuestra Misión</a>
+                <a href="../../index.html#servicios" class="link">Servicios</a>
+
+                <a href="catalog.html" class="link" style="color: var(--color-primary-600); font-weight: 700;">Catálogo
+                    y Tienda</a>
+                <a href="../../index.html#fondo-social" class="link">Fondo Social</a>
+            </nav>
+
+            <!-- Derecha: Botón y Login -->
+            <div class="nav-actions">
+
+                <a href="../../index.html#adoptar-pasos" class="btn-ayuda">
+                    <i data-lucide="paw-print" width="20" height="20" style="flex-shrink: 0;"></i> Quiero Adoptar
+                </a>
+
+                <div id="userSessionControls" style="display: flex; align-items: center; gap: 16px;">
+
+                    <a href="../auth/login.html" id="navLoginBtn" class="login-link">
+                        <i data-lucide="user" width="20" height="20" style="flex-shrink: 0;"></i> Iniciar Sesión
+                    </a>
+
+                    <div id="navUserMenu" style="display: none; align-items: center; gap: 12px;">
+                        <span id="navUserName"
+                            style="font-weight: 600; font-size: 0.9rem; color: var(--color-slate-700);"></span>
+                        <button onclick="cerrarSesion()" class="btn btn-outline"
+                            style="padding: 6px 12px; font-size: 0.8rem; border-color: var(--color-slate-300);">
+                            Cerrar Sesión
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </header>
+
+    <main style="padding-bottom: var(--space-16);">
+
+        <!-- HEADER DE LA TIENDA Y BUSCADOR -->
+        <div
+            style="background-color: var(--color-white); padding: var(--space-12) var(--space-6); border-bottom: 1px solid var(--color-slate-200); text-align: center;">
+            <div style="max-width: 800px; margin: 0 auto;">
+                <span class="pill-badge">Pet Pantry Store & Rescue</span>
+                <h1 style="margin-top: 16px;">Encuentra a tu mejor amigo o consiéntelo</h1>
+                <p class="text-muted">Adopciones responsables y los mejores productos para su cuidado.</p>
+
+                <div
+                    style="display: flex; gap: 8px; margin-top: var(--space-8); max-width: 600px; margin-left: auto; margin-right: auto;">
+                    <div class="input-group" style="flex: 1;">
+                        <i data-lucide="search" class="input-icon"></i>
+                        <input type="text" id="input-busqueda" class="form-control"
+                            placeholder="Encuentra todo para tu mascota..." style="border-radius: var(--radius-full);">
+                    </div>
+                    <button id="btn-buscar" class="btn btn-primary"
+                        style="border-radius: var(--radius-full); padding: 0 24px;">
+                        Buscar
+                    </button>
+                </div>
+
+                <div
+                    style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-top: var(--space-8);">
+                    <button class="btn btn-primary tab-btn" id="tab-adopcion"><i data-lucide="paw-print"
+                            style="width:16px;"></i> Adopciones</button>
+                    <button class="btn btn-outline tab-btn" id="tab-alimentos"><i data-lucide="bone"
+                            style="width:16px;"></i> Alimentos</button>
+                    <button class="btn btn-outline tab-btn" id="tab-accesorios"><i data-lucide="shopping-bag"
+                            style="width:16px;"></i> Accesorios</button>
+                    <button class="btn btn-outline tab-btn" id="tab-farmacia"><i data-lucide="pill"
+                            style="width:16px;"></i> Farmacia</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTENEDOR DEL GRID -->
+        <div style="max-width: 1200px; margin: var(--space-8) auto; padding: 0 var(--space-6);">
+            <div id="catalog-grid"
+                style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: var(--space-6);">
+                <!-- Renderizado vía JS -->
+            </div>
+        </div>
+
+    </main>
+
+    <!-- MODAL DE POSTULACIÓN -->
+    <div class="modal-overlay" id="adoption-modal" aria-hidden="true">
+        <!-- El contenido del modal se mantiene igual -->
+        <div class="modal-container" role="dialog">
+            <div class="modal-header">
+                <h3 class="modal-title">Solicitud de Adopción / Compra</h3>
+                <button class="modal-close-btn" id="btn-close-modal"><i data-lucide="x"></i></button>
+            </div>
+            <form id="form-postulacion">
+                <div class="modal-body">
+                    <p class="text-small text-muted" style="margin-bottom: 16px;">Estás gestionando el ítem: <strong
+                            id="modal-pet-name" style="color: var(--color-primary-600);"></strong></p>
+                    <div class="form-group">
+                        <label class="form-label">Tu Nombre Completo</label>
+                        <input type="text" id="postulacion-nombre" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">DNI (8 dígitos)</label>
+                        <input type="text" id="postulacion-dni" class="form-control" maxlength="8" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Correo electrónico</label>
+                        <input type="email" id="postulacion-email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">¿Por qué quieres adoptar?</label>
+                        <textarea id="postulacion-motivo" class="form-control" rows="2"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-ghost" id="btn-cancel-modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary"><i data-lucide="send"></i> Enviar Solicitud</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ENLACES A LOS CONTROLADORES JS -->
+    <script type="module" src="../../src/js/pages/public-catalog.js"></script>
+    <script type="module" src="../../src/js/app.js"></script>
+    <script src="../../src/js/utils/toast.js"></script>
+    <script>lucide.createIcons();</script>
+
+
+</body>
+
+</html>

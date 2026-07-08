@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Personal | Pet Pantry Pro</title>
+
+    <link rel="stylesheet" href="../../src/css/base/reset.css">
+    <link rel="stylesheet" href="../../src/css/base/variables.css">
+    <link rel="stylesheet" href="../../src/css/base/typography.css">
+    <link rel="stylesheet" href="../../src/css/layouts/app-layout.css">
+    <link rel="stylesheet" href="../../src/css/layouts/sidebar.css">
+    <link rel="stylesheet" href="../../src/css/layouts/topbar.css">
+    <link rel="stylesheet" href="../../src/css/components/cards.css">
+    <link rel="stylesheet" href="../../src/css/components/tables.css">
+    <link rel="stylesheet" href="../../src/css/components/badges.css">
+    <link rel="stylesheet" href="../../src/css/components/buttons.css">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .campo label {
+            display: block;
+            font-weight: 600;
+            color: #475569;
+            font-size: 0.85rem;
+            margin-bottom: 6px;
+        }
+
+        .campo input,
+        .campo select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            background: #fff;
+            font-family: inherit;
+        }
+
+        .alerta {
+            display: none;
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 640px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-wrapper">
+
+        <aside class="app-sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <i data-lucide="paw-print" class="sidebar-brand"></i>
+                <span class="sidebar-brand">PetPantry Pro</span>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-item">
+                    <a href="panel-admin.html" class="nav-link">
+                        <i data-lucide="layout-dashboard"></i> Resumen
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="adopciones.html" class="nav-link">
+                        <i data-lucide="bone"></i> Adopciones
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="productos.html" class="nav-link">
+                        <i data-lucide="shopping-bag"></i> Productos
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="personal.html" class="nav-link active">
+                        <i data-lucide="users"></i> Personal
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="reportes.html" class="nav-link">
+                        <i data-lucide="bar-chart-3"></i> Reportes
+                    </a>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../auth/login.html" class="nav-link text-danger">
+                    <i data-lucide="log-out"></i> Cerrar Sesión
+                </a>
+            </div>
+        </aside>
+
+        <header class="app-topbar">
+            <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+                <i data-lucide="menu"></i>
+            </button>
+            <div class="user-profile">
+                <div class="user-info">
+                    <span class="user-name">Dr. Carlos Vise</span>
+                    <span class="user-role">Administrador</span>
+                </div>
+                <div class="user-avatar">CV</div>
+            </div>
+        </header>
+
+        <main class="app-main">
+            <div class="content-area">
+                <header style="margin-bottom: var(--space-8);">
+                    <h1>Gestión de Personal</h1>
+                    <p class="text-muted">Crea y administra las cuentas de veterinarios y almaceneros. Solo el
+                        administrador puede hacerlo.</p>
+                </header>
+
+                <!-- CREAR PERSONAL -->
+                <div class="card" style="margin-bottom: var(--space-8);">
+                    <div class="card-header">
+                        <h3 class="card-title" style="display:flex; align-items:center; gap:8px;">
+                            <i data-lucide="user-plus" style="color: var(--color-primary-600);"></i> Nueva Cuenta de
+                            Personal
+                        </h3>
+                    </div>
+                    <div style="padding: 20px;">
+                        <div id="alerta" class="alerta"></div>
+
+                        <form id="form-personal">
+                            <div class="form-grid">
+                                <div class="campo">
+                                    <label for="nombre">Nombre completo</label>
+                                    <input type="text" id="nombre" placeholder="Ej. Dra. Laura Ríos" required>
+                                </div>
+                                <div class="campo">
+                                    <label for="usuario">Usuario</label>
+                                    <input type="text" id="usuario" placeholder="Ej. laura.rios" required
+                                        autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="form-grid">
+                                <div class="campo">
+                                    <label for="rol">Rol</label>
+                                    <select id="rol" required>
+                                        <option value="2">Veterinario</option>
+                                        <option value="3">Almacenero</option>
+                                    </select>
+                                </div>
+                                <div class="campo">
+                                    <label for="password">Contraseña temporal</label>
+                                    <input type="password" id="password" placeholder="Mínimo 8 caracteres" required
+                                        autocomplete="new-password">
+                                </div>
+                            </div>
+                            <button type="submit" id="btn-crear" class="btn btn-primary" style="padding: 12px 20px;">
+                                <i data-lucide="save" style="width:18px;"></i> Crear cuenta
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- LISTA DE PERSONAL -->
+                <div class="card" style="margin-bottom: var(--space-8);">
+                    <div class="card-header">
+                        <h3 class="card-title">Personal Registrado</h3>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Usuario</th>
+                                    <th>Nombre</th>
+                                    <th>Rol</th>
+                                    <th>Estado</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabla-personal">
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted" style="padding:24px;">Cargando...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- LISTA DE CLIENTES REGISTRADOS -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title" style="display:flex; align-items:center; gap:8px;">
+                            <i data-lucide="user-round" style="color: var(--color-primary-600);"></i> Cuentas de
+                            Clientes
+                        </h3>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Correo / Usuario</th>
+                                    <th>Nombre</th>
+                                    <th>Teléfono</th>
+                                    <th>Dirección</th>
+                                    <th>Estado</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabla-clientes">
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted" style="padding:24px;">Cargando...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    </div>
+
+    <script type="module">
+        import { StorageService } from '../../src/js/services/StorageService.js';
+
+        const ROLES = { 2: 'veterinario', 3: 'almacenero' };
+
+        function mostrarAlerta(msg, ok) {
+            const a = document.getElementById('alerta');
+            a.textContent = msg;
+            a.style.display = 'block';
+            a.style.background = ok ? '#dcfce7' : '#fee2e2';
+            a.style.color = ok ? '#15803d' : '#b91c1c';
+            a.style.border = ok ? '1px solid #22c55e' : '1px solid #ef4444';
+        }
+
+        function cargarPersonal() {
+            const tbody = document.getElementById('tabla-personal');
+            // Solo se lista al personal (no a los clientes)
+            const data = StorageService.getAll('usuarios').filter(u => u.rol !== 'cliente');
+
+            if (!data.length) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted" style="padding:24px;">Sin personal registrado.</td></tr>';
+                return;
+            }
+            tbody.innerHTML = data.map(u => {
+                const activo = u.activo !== false; // por defecto activo si no se definió
+                const esAdmin = u.rol === 'administrador';
+                return `
+            <tr>
+                <td class="fw-medium">${u.usuario}</td>
+                <td>${u.nombre}</td>
+                <td><span class="badge badge-primary">${u.rol}</span></td>
+                <td>
+                    <span class="badge ${activo ? 'badge-success' : 'badge-danger'}">
+                        ${activo ? 'Activo' : 'Inactivo'}
+                    </span>
+                </td>
+                <td>
+                    ${esAdmin
+                        ? '<span class="text-muted" style="font-size:0.8rem;">—</span>'
+                        : `<button class="btn btn-outline btn-sm" onclick="window.cambiarEstado('${u.id}', ${!activo})">
+                               ${activo ? 'Desactivar' : 'Activar'}
+                           </button>`}
+                </td>
+            </tr>`;
+            }).join('');
+            if (window.lucide) lucide.createIcons();
+        }
+
+        window.cambiarEstado = (id, nuevoEstado) => {
+            StorageService.update('usuarios', id, { activo: nuevoEstado });
+            mostrarAlerta(`Usuario ${nuevoEstado ? 'activado' : 'desactivado'} con éxito.`, true);
+            cargarPersonal();
+        };
+
+        function cargarClientes() {
+            const tbody = document.getElementById('tabla-clientes');
+            if (!tbody) return;
+
+            const data = StorageService.getAll('usuarios').filter(u => u.rol === 'cliente');
+
+            if (!data.length) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted" style="padding:24px;">Todavía no hay clientes registrados.</td></tr>';
+                return;
+            }
+            tbody.innerHTML = data.map(u => {
+                const activo = u.activo !== false;
+                return `
+            <tr>
+                <td class="fw-medium">${u.usuario}</td>
+                <td>${u.nombre || '—'}</td>
+                <td>${u.telefono || '—'}</td>
+                <td>${u.direccion || '—'}</td>
+                <td>
+                    <span class="badge ${activo ? 'badge-success' : 'badge-danger'}">
+                        ${activo ? 'Activo' : 'Inactivo'}
+                    </span>
+                </td>
+                <td>
+                    <button class="btn btn-outline btn-sm" onclick="window.cambiarEstadoCliente('${u.id}', ${!activo})">
+                        ${activo ? 'Desactivar' : 'Activar'}
+                    </button>
+                </td>
+            </tr>`;
+            }).join('');
+            if (window.lucide) lucide.createIcons();
+        }
+
+        window.cambiarEstadoCliente = (id, nuevoEstado) => {
+            StorageService.update('usuarios', id, { activo: nuevoEstado });
+            mostrarAlerta(`Cliente ${nuevoEstado ? 'activado' : 'desactivado'} con éxito.`, true);
+            cargarClientes();
+        };
+
+        document.getElementById('form-personal').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const nombre = document.getElementById('nombre').value.trim();
+            const usuario = document.getElementById('usuario').value.trim();
+            const rolId = parseInt(document.getElementById('rol').value);
+            const password = document.getElementById('password').value;
+            const btn = document.getElementById('btn-crear');
+
+            if (!nombre || !usuario || !password) return mostrarAlerta('Completa todos los campos.', false);
+            if (password.length < 8) return mostrarAlerta('La contraseña debe tener al menos 8 caracteres.', false);
+
+            const usuarios = StorageService.getAll('usuarios');
+            if (usuarios.some(u => u.usuario === usuario)) {
+                return mostrarAlerta('Ese nombre de usuario ya existe.', false);
+            }
+
+            btn.disabled = true;
+            StorageService.create('usuarios', {
+                nombre,
+                usuario,
+                password,
+                rol: ROLES[rolId] || 'veterinario',
+                activo: true,
+                telefono: '',
+                direccion: ''
+            });
+
+            mostrarAlerta('Personal creado con éxito.', true);
+            this.reset();
+            cargarPersonal();
+            btn.disabled = false;
+        });
+
+        cargarPersonal();
+        cargarClientes();
+        if (window.lucide) lucide.createIcons();
+
+        // Si un cliente se registra en otra pestaña (register.html), esta vista se refresca sola.
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'usuarios') {
+                cargarPersonal();
+                cargarClientes();
+            }
+        });
+    </script>
+</body>
+
+</html>

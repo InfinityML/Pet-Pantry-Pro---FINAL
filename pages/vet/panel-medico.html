@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultorio Médico | Pet Pantry Pro</title>
+
+    <!-- Rutas al Design System -->
+    <link rel="stylesheet" href="../../src/css/base/reset.css">
+    <link rel="stylesheet" href="../../src/css/base/variables.css">
+    <link rel="stylesheet" href="../../src/css/base/typography.css">
+    <link rel="stylesheet" href="../../src/css/layouts/app-layout.css">
+    <link rel="stylesheet" href="../../src/css/layouts/sidebar.css">
+    <link rel="stylesheet" href="../../src/css/layouts/topbar.css">
+    <link rel="stylesheet" href="../../src/css/components/cards.css">
+    <link rel="stylesheet" href="../../src/css/components/buttons.css">
+    <link rel="stylesheet" href="../../src/css/components/badges.css">
+    <link rel="stylesheet" href="../../src/css/components/tables.css">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        .ficha-inactiva {
+            opacity: 0.5;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .ficha-activa {
+            opacity: 1;
+            pointer-events: auto;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-wrapper">
+
+        <!-- SIDEBAR (Rol: Veterinario) -->
+        <aside class="app-sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <i data-lucide="activity" class="sidebar-brand" style="color: var(--color-primary-600);"></i>
+                <span class="sidebar-brand">Clínica PetPantry</span>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-item">
+                    <a href="#" class="nav-link active" id="nav-agenda" onclick="showVetView('agenda'); return false;">
+                        <i data-lucide="calendar-days"></i> Agenda Diaria
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" id="nav-historias" onclick="showVetView('historias'); return false;">
+                        <i data-lucide="folder-heart"></i> Historias Clínicas
+                    </a>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../auth/login.html" class="nav-link text-danger">
+                    <i data-lucide="log-out"></i> Cerrar Sesión
+                </a>
+            </div>
+        </aside>
+
+        <!-- TOPBAR -->
+        <header class="app-topbar">
+            <button class="menu-toggle" id="menuToggle">
+                <i data-lucide="menu"></i>
+            </button>
+            <div class="user-profile">
+                <div class="user-info">
+                    <span class="user-name">Dra. Elena</span>
+                    <span class="user-role">Médico Veterinario</span>
+                </div>
+                <div class="user-avatar" style="background: #e0f2fe; color: #0284c7;">EL</div>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT -->
+        <main class="app-main">
+            <div class="content-area">
+
+                <!-- ===================== VISTA: AGENDA DIARIA ===================== -->
+                <div id="view-agenda">
+                    <header style="margin-bottom: var(--space-6);">
+                        <h1>Consultorio Médico</h1>
+                        <p class="text-muted">Gestiona tus citas y registra las atenciones clínicas del día.</p>
+                    </header>
+
+                    <!-- MÉTRICAS SUPERIORES -->
+                    <div
+                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                        <div class="card" style="padding: 20px; border-left: 4px solid var(--color-primary-500);">
+                            <p style="color: #64748b; font-size: 0.9rem; font-weight: 600; margin-bottom: 8px;">Citas
+                                Pendientes Hoy</p>
+                            <h2 id="kpi-citas" style="font-size: 2rem; margin: 0; color: #0f172a;">8</h2>
+                        </div>
+                        <div class="card" style="padding: 20px; border-left: 4px solid #10b981;">
+                            <p style="color: #64748b; font-size: 0.9rem; font-weight: 600; margin-bottom: 8px;">Cirugías
+                                Programadas</p>
+                            <h2 style="font-size: 2rem; margin: 0; color: #0f172a;">2</h2>
+                        </div>
+                    </div>
+
+                    <!-- MASTER-DETAIL (Sala de espera + Ficha) -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start;">
+
+                        <!-- IZQUIERDA: SALA DE ESPERA -->
+                        <div class="card">
+                            <div class="card-header"
+                                style="display: flex; justify-content: space-between; align-items: center;">
+                                <h3 class="card-title">Pacientes en Sala de Espera</h3>
+                                <button class="btn btn-outline" onclick="abrirModalCita()"
+                                    style="padding: 6px 12px; font-size: 0.85rem;">
+                                    <i data-lucide="plus" style="width: 14px;"></i> Nuevo Ingreso
+                                </button>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Paciente</th>
+                                            <th>Motivo / Tipo</th>
+                                            <th>Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabla-agenda">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- DERECHA: FICHA MÉDICA -->
+                        <div class="card ficha-inactiva" id="panel-ficha">
+                            <div class="card-header"
+                                style="display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
+                                <h3 class="card-title" style="display:flex; align-items:center; gap:8px;">
+                                    <i data-lucide="stethoscope"></i> Ficha de Atención
+                                </h3>
+                                <span id="nombre-paciente-activo"
+                                    style="color: #ef4444; font-weight: 600; font-size: 0.9rem;">Ningún paciente
+                                    seleccionado</span>
+                            </div>
+
+                            <div style="padding: 24px;">
+                                <form id="form-consulta">
+                                    <div class="form-group"
+                                        style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px;">
+                                        <label style="font-weight: 600; color: #475569;">Diagnóstico y Notas
+                                            Clínicas</label>
+                                        <textarea id="notas-clinicas"
+                                            style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; resize: vertical;"
+                                            rows="4"
+                                            placeholder="Describe los síntomas, diagnóstico y procedimiento realizado..."
+                                            required></textarea>
+                                    </div>
+
+                                    <div
+                                        style="display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 20px;">
+                                        <div class="form-group"
+                                            style="display: flex; flex-direction: column; gap: 8px;">
+                                            <label style="font-weight: 600; color: #475569;">Recetar Fármaco /
+                                                Insumo</label>
+                                            <select id="farmaco"
+                                                style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; background-color: white;">
+                                                <option value="ninguno">No recetar medicamentos</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group"
+                                            style="display: flex; flex-direction: column; gap: 8px;">
+                                            <label style="font-weight: 600; color: #475569;">Cantidad</label>
+                                            <input type="number" id="cantidad-farmaco"
+                                                style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px;"
+                                                value="1" min="1">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group"
+                                        style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px;">
+                                        <label style="font-weight: 600; color: #475569;">Tipo de Atención
+                                            (Trazabilidad)</label>
+                                        <select id="tipo-atencion"
+                                            style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; background-color: white;">
+                                            <option value="COMERCIAL">Consulta Privada (Comercial)</option>
+                                            <option value="SOCIAL">Atención Solidaria (Social)</option>
+                                        </select>
+                                        <small style="color: #64748b; font-size: 0.85rem;">El tipo de atención define de
+                                            qué inventario se descontarán los insumos.</small>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary"
+                                        style="width: 100%; padding: 14px; font-size: 1rem; border-radius: 8px; background-color: var(--color-primary-600); color: white; border: none; display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer;">
+                                        <i data-lucide="file-check-2" style="width: 20px;"></i> Finalizar Consulta y
+                                        Generar Receta
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ===================== VISTA: HISTORIAS CLÍNICAS ===================== -->
+                <div id="view-historias" style="display: none;">
+                    <header style="margin-bottom: var(--space-6);">
+                        <h1>Historias Clínicas</h1>
+                        <p class="text-muted">Registro de todas las atenciones finalizadas.</p>
+                    </header>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Atenciones Registradas</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Paciente</th>
+                                        <th>Especie</th>
+                                        <th>DNI Dueño</th>
+                                        <th>Diagnóstico</th>
+                                        <th>Fármaco Recetado</th>
+                                        <th>Tipo</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla-historias">
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted" style="padding: 24px;">Cargando
+                                            historias...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL AGENDAR PACIENTE -->
+    <div class="modal-overlay" id="modalAgendar">
+        <div class="modal-content">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;">
+                <h3 style="margin:0; color: #0f172a; font-size: 1.2rem;">Ingresar Paciente a Espera</h3>
+                <button onclick="cerrarModalCita()"
+                    style="background:none; border:none; cursor:pointer; color: #64748b;"><i
+                        data-lucide="x"></i></button>
+            </div>
+
+            <form id="form-nuevo-ingreso">
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label style="font-weight: 600; color: #475569; display: block; margin-bottom: 8px;">DNI del
+                        Propietario (Opcional)</label>
+                    <input type="text" id="nuevo-dni" class="form-control"
+                        placeholder="Dejar vacío si es animal rescatado" pattern="\d{8}" maxlength="8"
+                        style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px;">
+                    <small style="color: #64748b;">Si ingresa DNI, será atención COMERCIAL.</small>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label style="font-weight: 600; color: #475569; display: block; margin-bottom: 8px;">Nombre de la
+                        Mascota</label>
+                    <input type="text" id="nuevo-nombre" class="form-control" placeholder="Ej. Firulais" required
+                        style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px;">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+                    <div class="form-group">
+                        <label
+                            style="font-weight: 600; color: #475569; display: block; margin-bottom: 8px;">Especie</label>
+                        <select id="nueva-especie" class="form-control" required
+                            style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; background-color: white;">
+                            <option value="" disabled selected>Seleccione...</option>
+                            <option value="Perro">Canino (Perro)</option>
+                            <option value="Gato">Felino (Gato)</option>
+                            <option value="Ave">Ave</option>
+                            <option value="Roedor">Roedor</option>
+                            <option value="Exótico">Exótico</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label style="font-weight: 600; color: #475569; display: block; margin-bottom: 8px;">Edad
+                            Aprox.</label>
+                        <input type="text" id="nueva-edad" class="form-control" placeholder="Ej. 2 años" required
+                            style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px;">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary"
+                    style="width: 100%; padding: 14px; font-size: 1rem; border-radius: 8px; background-color: var(--color-primary-600); color: white; border: none; cursor: pointer;">
+                    Guardar Ingreso
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+    <script src="../../src/js/utils/toast.js"></script>
+    <!-- ================= LÓGICA (módulo con persistencia real) ================= -->
+    <script type="module">
+        import { StorageService } from '../../src/js/services/StorageService.js';
+
+        let citaActiva = null; // { id, mascota, tipo }
+
+        /* ---------- Cambio de vista (Agenda <-> Historias) ---------- */
+        window.showVetView = (vista) => {
+            const esAgenda = vista === 'agenda';
+            document.getElementById('view-agenda').style.display = esAgenda ? 'block' : 'none';
+            document.getElementById('view-historias').style.display = esAgenda ? 'none' : 'block';
+            document.getElementById('nav-agenda').classList.toggle('active', esAgenda);
+            document.getElementById('nav-historias').classList.toggle('active', !esAgenda);
+            if (!esAgenda) cargarHistorias();
+            if (window.lucide) lucide.createIcons();
+        };
+
+        window.abrirModalCita = () => { document.getElementById('modalAgendar').style.display = 'flex'; };
+        window.cerrarModalCita = () => { document.getElementById('modalAgendar').style.display = 'none'; };
+
+        function badgeTipo(tipo) {
+            const social = (tipo || '').toLowerCase().startsWith('soc');
+            return social
+                ? '<span class="badge" style="background:#ecfdf5; color:#059669;">SOCIAL</span>'
+                : '<span class="badge" style="background:#fffbeb; color:#d97706;">COMERCIAL</span>';
+        }
+
+        /* ---------- Cargar fármacos disponibles desde el stock real (Almacén) ---------- */
+        function cargarOpcionesFarmaco() {
+            const select = document.getElementById('farmaco');
+            const valorPrevio = select.value;
+
+            function estaVencido(fechaVencimiento) {
+                if (!fechaVencimiento) return false;
+                const hoy = new Date(); hoy.setHours(0, 0, 0, 0);
+                const vence = new Date(fechaVencimiento); vence.setHours(0, 0, 0, 0);
+                return vence < hoy;
+            }
+
+            const lotesAprobados = StorageService.getAll('inventarioLotes')
+                .filter(l => l.estado === 'Aprobado' && !estaVencido(l.vencimiento));
+            const mapa = new Map();
+            lotesAprobados.forEach(l => {
+                mapa.set(l.farmaco, (mapa.get(l.farmaco) || 0) + l.cantidad);
+            });
+
+            // Reconstruir opciones (mantenemos siempre "No recetar medicamentos")
+            select.innerHTML = '<option value="ninguno">No recetar medicamentos</option>';
+
+            if (mapa.size === 0) {
+                const opt = document.createElement('option');
+                opt.disabled = true;
+                opt.textContent = 'No hay fármacos con stock aprobado';
+                select.appendChild(opt);
+                return;
+            }
+
+            Array.from(mapa.entries())
+                .sort((a, b) => a[0].localeCompare(b[0]))
+                .forEach(([farmaco, total]) => {
+                    const opt = document.createElement('option');
+                    opt.value = farmaco;
+                    opt.textContent = total > 0 ? `${farmaco} (${total} disp.)` : `${farmaco} (SIN STOCK)`;
+                    opt.disabled = total <= 0; // no permitir recetar algo que ya no hay
+                    select.appendChild(opt);
+                });
+
+            // Si el valor que tenía seleccionado ya no existe o se quedó sin stock, lo reseteamos
+            if ([...select.options].some(o => o.value === valorPrevio && !o.disabled)) {
+                select.value = valorPrevio;
+            }
+        }
+
+        // Refrescar el select cada vez que se abre/activa la vista de agenda
+        // y también si Almacén/Admin cambian el stock en otra pestaña
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'inventarioLotes') cargarOpcionesFarmaco();
+        });
+
+        /* ---------- Agenda (sala de espera) ---------- */
+        function cargarAgenda() {
+            const tbody = document.getElementById('tabla-agenda');
+
+            const data = StorageService.getAll('agendaPacientes').filter(p => p.estado !== 'Atendido');
+            document.getElementById('kpi-citas').innerText = data.length;
+
+            if (!data.length) {
+                tbody.innerHTML = '<tr><td colspan="3" class="text-center text-muted" style="padding:24px;">No hay pacientes en sala de espera.</td></tr>';
+                return;
+            }
+            tbody.innerHTML = data.map(c => `
+            <tr>
+                <td>
+                    <div style="font-weight:600; color:#0f172a;">${c.mascota}</div>
+                    <div style="font-size:0.8rem; color:#64748b;">${c.especie} • ${c.edad || ''}</div>
+                </td>
+                <td>${badgeTipo(c.tipo)}</td>
+                <td>
+                    <button class="btn btn-outline btn-atender"
+                    data-id="${c.id}" data-mascota="${c.mascota}" data-tipo="${c.tipo}"
+                    data-especie="${c.especie || ''}" data-dni="${c.dni || ''}">
+                    Atender
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+
+            document.querySelectorAll('.btn-atender').forEach(btn => {
+                btn.addEventListener('click', () => seleccionarCita({
+                    id: btn.getAttribute('data-id'),
+                    mascota: btn.getAttribute('data-mascota'),
+                    tipo: btn.getAttribute('data-tipo'),
+                    especie: btn.getAttribute('data-especie'),
+                    dni: btn.getAttribute('data-dni')
+                }));
+            });
+        }
+
+        /* ---------- Seleccionar paciente (activar ficha) ---------- */
+        function seleccionarCita(cita) {
+            citaActiva = cita;
+            const panel = document.getElementById('panel-ficha');
+            panel.classList.remove('ficha-inactiva');
+            panel.classList.add('ficha-activa');
+
+            const header = document.getElementById('nombre-paciente-activo');
+            header.innerText = `Atendiendo a: ${cita.mascota}`;
+            header.style.color = '#059669';
+
+            document.getElementById('tipo-atencion').value = (cita.tipo || '').toUpperCase();
+        }
+
+        /* ---------- Nuevo ingreso (registro de paciente en sala de espera) ---------- */
+        document.getElementById('form-nuevo-ingreso').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const payload = {
+                dni: document.getElementById('nuevo-dni').value.trim(),
+                mascota: document.getElementById('nuevo-nombre').value.trim(),
+                especie: document.getElementById('nueva-especie').value,
+                edad: document.getElementById('nueva-edad').value.trim(),
+                tipo: 'COMERCIAL',
+                estado: 'Pendiente'
+            };
+
+            StorageService.create('agendaPacientes', payload);
+
+            window.cerrarModalCita();
+            this.reset();
+            cargarAgenda();
+        });
+
+        /* ---------- Finalizar consulta (crea la orden de despacho para Almacén) ---------- */
+        document.getElementById('form-consulta').addEventListener('submit', function (e) {
+            e.preventDefault();
+            if (!citaActiva) return;
+
+            const farmaco = document.getElementById('farmaco').value;
+            const recetoMedicamento = farmaco && farmaco !== 'ninguno';
+            const cantidad = parseInt(document.getElementById('cantidad-farmaco').value) || 1;
+            const tipo = document.getElementById('tipo-atencion').value;
+
+            // 1. Guardar la historia clínica
+            StorageService.create('historiasClinicas', {
+                paciente: citaActiva.mascota,
+                especie: citaActiva.especie || 'No especificada',
+                dniDueno: citaActiva.dni || '—',
+                diagnostico: document.getElementById('notas-clinicas').value.trim(),
+                farmaco: recetoMedicamento ? farmaco : null,
+                cantidad: recetoMedicamento ? cantidad : 0,
+                tipo: tipo,
+                fecha: new Date().toISOString()
+            });
+
+            // 2. Si recetó medicamento, crear orden pendiente para Almacén
+            if (recetoMedicamento) {
+                StorageService.create('ordenesFarmacia', {
+                    paciente: citaActiva.mascota,
+                    farmaco: farmaco,
+                    cantidad: cantidad,
+                    tipo: tipo,
+                    estado: 'Pendiente de Despacho'
+                });
+            }
+
+            // 3. Marcar al paciente como atendido (desaparece de la sala de espera)
+            StorageService.update('agendaPacientes', citaActiva.id, { estado: 'Atendido' });
+
+            alert(`Consulta finalizada con éxito.${recetoMedicamento ? ' Receta enviada a almacén.' : ''}`);
+
+            citaActiva = null;
+            this.reset();
+            const panel = document.getElementById('panel-ficha');
+            panel.classList.remove('ficha-activa');
+            panel.classList.add('ficha-inactiva');
+            const header = document.getElementById('nombre-paciente-activo');
+            header.innerText = 'Ningún paciente seleccionado';
+            header.style.color = '#ef4444';
+            cargarAgenda();
+        });
+
+        /* ---------- Historias clínicas ---------- */
+        function cargarHistorias() {
+            const tbody = document.getElementById('tabla-historias');
+            const data = StorageService.getAll('historiasClinicas');
+
+            if (!data.length) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted" style="padding:24px;">Aún no hay atenciones registradas.</td></tr>';
+                return;
+            }
+            tbody.innerHTML = data.map(r => `
+            <tr>
+                <td class="text-muted">${new Date(r.fecha).toLocaleDateString('es-PE')}</td>
+                <td class="fw-medium">${r.paciente}</td>
+                <td>${r.especie || '—'}</td>
+                <td>${r.dniDueno || '—'}</td>
+                <td>${r.diagnostico || '—'}</td>
+                <td>${r.farmaco || 'Ninguno'}</td>
+                <td>${badgeTipo(r.tipo)}</td>
+            </tr>
+            `).join('');
+        }
+
+        /* ---------- Init ---------- */
+        cargarAgenda();
+        cargarOpcionesFarmaco();
+        cargarAgenda();
+    </script>
+
+    <script>lucide.createIcons();</script>
+
+</body>
+
+</html>

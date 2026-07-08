@@ -1,0 +1,105 @@
+/* ==========================================================================
+   PAGE: AUTHENTICATION (LOGIN)
+   ========================================================================== */
+
+.auth-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* --- Panel Izquierdo (Formulario) --- */
+.auth-form-section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-6);
+    background-color: var(--color-white);
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 400px;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-8);
+}
+
+.auth-header {
+    margin-bottom: var(--space-8);
+}
+
+.brand-icon-box {
+    width: 48px;
+    height: 48px;
+    background-color: var(--color-primary-50);
+    color: var(--color-primary-600);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-4);
+    border: 1px solid var(--color-primary-100);
+}
+
+.form-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2); /* El espaciado interior ya lo maneja forms.css */
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.form-actions {
+    margin-top: var(--space-4);
+}
+
+/* --- Panel Derecho (Gráfico) --- */
+.auth-visual-section {
+    display: none; /* Oculto en móviles */
+    flex: 1;
+    background: linear-gradient(135deg, var(--color-slate-900) 0%, var(--color-slate-700) 100%);
+    background-image: url('https://images.unsplash.com/photo-1576201836106-db1758fd1c97?q=80&w=1200&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+/* Overlay oscuro para poder leer el texto sobre la imagen */
+.auth-visual-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(15, 23, 42, 0.9) 0%, rgba(15, 23, 42, 0.4) 100%);
+}
+
+.visual-content {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: var(--space-12);
+    color: var(--color-white);
+}
+
+.visual-content blockquote {
+    font-size: 1.5rem;
+    font-weight: 500;
+    line-height: 1.4;
+    margin-bottom: var(--space-4);
+}
+
+/* --- Responsive Desktop --- */
+@media (min-width: 1024px) {
+    .auth-visual-section {
+        display: block;
+    }
+}

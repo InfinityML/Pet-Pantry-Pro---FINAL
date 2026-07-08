@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Seguro | Pet Pantry Pro</title>
+
+    <link rel="stylesheet" href="../../src/css/base/reset.css">
+    <link rel="stylesheet" href="../../src/css/base/variables.css">
+    <link rel="stylesheet" href="../../src/css/base/typography.css">
+    <link rel="stylesheet" href="../../src/css/components/forms.css">
+    <link rel="stylesheet" href="../../src/css/components/buttons.css">
+    <link rel="stylesheet" href="../../src/css/components/alerts.css">
+    <link rel="stylesheet" href="../../src/css/pages/auth.css">
+
+    <!-- CSS ULTRA-COMPACTO: Fuerzas las proporciones para evitar el "estiramiento" -->
+    <style>
+        .auth-form-section { padding: 20px !important; display: flex; flex-direction: column; justify-content: center; }
+        .auth-container { max-width: 320px !important; width: 100%; margin: 0 auto; }
+        
+        .back-link { margin-bottom: 12px !important; font-size: 0.75rem !important; display: inline-flex; align-items: center; gap: 4px; }
+        
+        /* Cabecera miniatura */
+        .auth-header { text-align: center; margin-bottom: 16px !important; }
+        .auth-header .brand-icon-box { margin: 0 auto 8px !important; width: 36px !important; height: 36px !important; }
+        .auth-header h2 { font-size: 1.25rem !important; margin-bottom: 4px !important; }
+        .auth-header p { font-size: 0.75rem !important; line-height: 1.2 !important; max-width: 280px; margin: 0 auto; }
+
+        /* Inputs y Labels más delgados */
+        .form-group { margin-bottom: 12px !important; }
+        .form-label { font-size: 0.75rem !important; margin-bottom: 4px !important; }
+        .form-control { 
+            padding: 8px 10px 8px 32px !important; /* Más delgado */
+            font-size: 0.85rem !important; 
+            height: 36px !important; 
+        }
+        .input-group .input-icon { width: 14px !important; height: 14px !important; left: 10px !important; top: 50% !important; transform: translateY(-50%) !important; position: absolute; }
+        
+        /* Checkbox y enlaces */
+        .form-check { margin-bottom: 12px !important; font-size: 0.75rem !important; }
+        .form-check input { width: 14px !important; height: 14px !important; }
+        
+        /* Botones más ajustados */
+        .btn { padding: 8px 12px !important; font-size: 0.85rem !important; height: 38px !important; }
+        
+        /* Truco para hacer el reCAPTCHA más pequeño sin romperlo */
+        .captcha-wrapper { 
+            display: flex; 
+            justify-content: center; 
+            margin-bottom: 12px !important;
+            transform: scale(0.85); /* Lo encoge un 15% */
+            transform-origin: center;
+            height: 65px; /* Evita que el contenedor ocupe espacio fantasma */
+        }
+
+        /* Sección de Registro inferior */
+        .register-section { 
+            text-align: center; 
+            border-top: 1px solid var(--color-slate-200); 
+            padding-top: 12px !important; 
+            margin-top: 12px !important; 
+        }
+        .register-section p { font-size: 0.75rem !important; margin-bottom: 8px !important; }
+    </style>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit" async defer></script>
+</head>
+<body>
+
+    <main class="auth-layout">
+        <section class="auth-form-section">
+            <div class="auth-container">
+                <a href="../../index.html" class="back-link link">
+                    <i data-lucide="arrow-left" style="width: 14px; height: 14px;"></i> Volver al inicio
+                </a>
+
+                <div class="auth-header">
+                    <div class="brand-icon-box">
+                        <i data-lucide="shield-check"></i>
+                    </div>
+                    <h2>Iniciar Sesión</h2>
+                    <p class="text-muted">PetPantryPro</p>
+                </div>
+
+                <!-- NUEVO: Contenedor de la alerta de error (Oculto por defecto) -->
+                <div id="loginAlert" style="display: none; background-color: #fee2e2; border: 1px solid #ef4444; color: #b91c1c; padding: 10px; border-radius: 6px; margin-bottom: 16px; align-items: center; gap: 8px; font-size: 0.8rem;">
+                    <i data-lucide="alert-circle" style="width: 16px; height: 16px;"></i>
+                    <span id="loginAlertText">Error aquí</span>
+                </div>
+
+                <!-- Formulario simulado para ruteo (sin action por defecto) -->
+                <form id="loginForm" class="form-wrapper" novalidate onsubmit="rutearUsuario(event)">
+
+                    <div class="form-group">
+                        <label for="username" class="form-label">Correo Electrónico o Usuario</label>
+                        <div class="input-group">
+                            <i data-lucide="user" class="input-icon"></i>
+                            <!-- Placeholders actualizados con los roles -->
+                            <input type="text" id="username" class="form-control" placeholder="Correo Electronico o Usuario" required autocomplete="username">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                            <label for="password" class="form-label" style="margin-bottom: 0 !important;">Contraseña</label>
+                            <a href="forgot-password.html" class="link" style="font-size: 0.75rem; font-weight: 600;">¿Olvidaste tu contraseña?</a>
+                        </div>
+                        <div class="input-group" style="position: relative;">
+                            <i data-lucide="key" class="input-icon"></i>
+                            <input type="password" id="password" class="form-control" placeholder="••••••••" required autocomplete="current-password" style="padding-right: 36px !important;">
+                            <!-- Botón del ojito posicionado absolutamente a la derecha -->
+                            <button type="button" class="toggle-password" onclick="togglePassword()" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--color-slate-500); padding: 4px; display: flex; align-items: center; justify-content: center;">
+                                <i data-lucide="eye" style="width: 16px; height: 16px;" id="eye-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-check">
+                        <input type="checkbox" id="remember">
+                        <label for="remember">Mantener sesión iniciada</label>
+                    </div>
+
+                    <div class="captcha-wrapper">
+                        <div id="recaptcha-login"></div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" id="loginBtn" class="btn btn-primary w-100">
+                            Iniciar Sesión
+                        </button>
+                    </div>
+                </form>
+
+                <div class="register-section">
+                    <p class="text-muted">¿Aún no eres parte de nuestra comunidad?</p>
+                    <a href="register.html" class="btn btn-outline w-100" style="border: 1.5px solid var(--color-primary-600); color: var(--color-primary-600); text-decoration: none; display: flex; justify-content: center; align-items: center;">
+                        Resgistrate Aquí
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="auth-visual-section">
+            <div class="visual-content">
+                <blockquote>
+                    "La tecnología no reemplaza la empatía, pero nos da las herramientas para salvar más vidas."
+                </blockquote>
+                <p>- Equipo Pet Pantry Pro</p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // ==========================================
+        // SISTEMA DE SEGURIDAD Y BLOQUEO PROGRESIVO
+        // ==========================================
+        const INTENTOS_MAXIMOS = 5;
+        let intentosFallidos = parseInt(localStorage.getItem('loginIntentos')) || 0;
+        let nivelBloqueo = parseInt(localStorage.getItem('loginNivelBloqueo')) || 1; 
+        let tiempoDesbloqueo = parseInt(localStorage.getItem('loginTiempoDesbloqueo')) || 0;
+
+        // Validar validadores visuales
+        const loginBtn = document.getElementById('loginBtn');
+        const checkboxRemember = document.getElementById('remember');
+
+        // Función para verificar si el botón debe estar activo
+        function verificarFormulario() {
+            if (Date.now() < tiempoDesbloqueo) return; // Si está bloqueado, no hacer nada
+
+            // Solo habilitar si el checkbox está marcado
+            if (checkboxRemember.checked) {
+                loginBtn.disabled = false;
+                loginBtn.classList.remove('btn-outline');
+                loginBtn.classList.add('btn-primary');
+            } else {
+                loginBtn.disabled = true;
+                loginBtn.classList.remove('btn-primary');
+                loginBtn.classList.add('btn-outline');
+            }
+        }
+
+        // Escuchar cambios en el checkbox
+        checkboxRemember.addEventListener('change', verificarFormulario);
+
+        // Control del contador regresivo visual
+        function iniciarContadorBloqueo() {
+            loginBtn.disabled = true;
+            loginBtn.classList.remove('btn-primary');
+            loginBtn.classList.add('btn-outline');
+            
+            const intervalo = setInterval(() => {
+                const tiempoRestante = Math.ceil((tiempoDesbloqueo - Date.now()) / 1000);
+                
+                if (tiempoRestante <= 0) {
+                    clearInterval(intervalo);
+                    intentosFallidos = 0;
+                    localStorage.setItem('loginIntentos', 0);
+                    loginBtn.innerText = "Iniciar Sesión";
+                    verificarFormulario(); // Re-evaluar si el checkbox está marcado
+                } else {
+                    const minutos = Math.floor(tiempoRestante / 60);
+                    const segundos = tiempoRestante % 60;
+                    loginBtn.innerText = `Bloqueado por seguridad (${minutos}:${segundos.toString().padStart(2, '0')})`;
+                }
+            }, 1000);
+        }
+
+        // Ejecutar al cargar la página por si el usuario la refrescó estando bloqueado
+        if (Date.now() < tiempoDesbloqueo) {
+            iniciarContadorBloqueo();
+        } else {
+            verificarFormulario(); // Validar estado inicial del checkbox
+        }
+
+        // ==========================================
+        // UTILIDADES DE INTERFAZ
+        // ==========================================
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eye-icon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.setAttribute('data-lucide', 'eye-off');
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.setAttribute('data-lucide', 'eye');
+            }
+            lucide.createIcons(); 
+        }
+
+        function onRecaptchaLoad() {
+            grecaptcha.render('recaptcha-login', {
+                'sitekey': '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI', // Esta es tu clave pública
+            });
+        }
+
+        function mostrarAlertaError(mensaje) {
+            const alertBox = document.getElementById('loginAlert');
+            const alertText = document.getElementById('loginAlertText');
+            alertText.innerText = mensaje;
+            alertBox.style.display = 'flex'; 
+            setTimeout(() => { alertBox.style.display = 'none'; }, 4000);
+        }
+
+        // ==========================================
+        // CONEXIÓN AL BACKEND Y RUTEO
+        // ==========================================
+        // ==========================================
+        // CONEXIÓN OFFLINE (A prueba de fallos)
+        // ==========================================
+        async function rutearUsuario(event) {
+            event.preventDefault(); 
+            
+            // 1. Validar bloqueo
+            if (Date.now() < tiempoDesbloqueo) {
+                mostrarAlertaError("Sistema bloqueado. Espere a que termine el contador.");
+                return;
+            }
+
+            // 2. Validar Captcha
+            const captchaResponse = grecaptcha.getResponse();
+            if (captchaResponse.length === 0) {
+                mostrarAlertaError("Por favor, verifica que no eres un robot.");
+                return;
+            }
+            
+            // Usamos trim() para borrar espacios en blanco accidentales
+            const usuarioInput = document.getElementById('username').value.trim();
+            const passwordInput = document.getElementById('password').value.trim();
+            
+            const textoOriginal = loginBtn.innerText;
+            loginBtn.innerText = "Validando...";
+            loginBtn.disabled = true;
+
+            // --- MAGIA: MEMORIA DE EMERGENCIA ---
+            let usuariosDB = JSON.parse(localStorage.getItem('usuarios'));
+
+            // Si la memoria está vacía o tiene las claves encriptadas viejas, la forzamos
+            if (!usuariosDB || usuariosDB.length === 0 || usuariosDB[0].password !== '123') {
+                console.log("Inyectando usuarios de emergencia...");
+                usuariosDB = [
+                    { usuario: 'carlos', password: '123', nombre: 'Dr. Carlos Vise', rol: 'administrador' },
+                    { usuario: 'elena', password: '123', nombre: 'Dra. Elena', rol: 'veterinario' },
+                    { usuario: 'marcos', password: '123', nombre: 'Marcos Peña', rol: 'almacenero' },
+                    { usuario: 'Italo.Arquiñego@gmail.com', password: '123', nombre: 'Italo Arquiñego', rol: 'cliente' }
+                ];
+                localStorage.setItem('usuarios', JSON.stringify(usuariosDB));
+            }
+
+            // 3. Buscar coincidencia exacta
+            const usuarioEncontrado = usuariosDB.find(u => u.usuario === usuarioInput && u.password === passwordInput);
+
+            if (usuarioEncontrado) {
+                // ÉXITO: Limpiamos los castigos y guardamos la sesión
+                localStorage.removeItem('loginIntentos');
+                localStorage.removeItem('loginNivelBloqueo');
+                localStorage.removeItem('loginTiempoDesbloqueo');
+
+                localStorage.setItem('usuarioActivo', usuarioEncontrado.usuario);
+                localStorage.setItem('rolActivo', usuarioEncontrado.rol);
+
+                // Redirección por roles
+                const rol = usuarioEncontrado.rol; 
+                if (rol === 'administrador') window.location.href = '../admin/panel-admin.html';
+                else if (rol === 'almacenero') window.location.href = '../inventory/panel-almacen.html';
+                else if (rol === 'veterinario') window.location.href = '../vet/panel-medico.html';
+                else window.location.href = '../client/panel-cliente.html';
+
+            } else {
+                // ERROR DE CREDENCIALES
+                grecaptcha.reset(); 
+                intentosFallidos++;
+                localStorage.setItem('loginIntentos', intentosFallidos);
+
+                if (intentosFallidos >= INTENTOS_MAXIMOS) {
+                    // Bloqueo progresivo
+                    const minutosCastigo = nivelBloqueo * 2; 
+                    tiempoDesbloqueo = Date.now() + (minutosCastigo * 60 * 1000);
+                    
+                    localStorage.setItem('loginTiempoDesbloqueo', tiempoDesbloqueo);
+                    localStorage.setItem('loginNivelBloqueo', nivelBloqueo + 1); 
+                    
+                    mostrarAlertaError(`Demasiados intentos. Sistema bloqueado por ${minutosCastigo} minutos.`);
+                    iniciarContadorBloqueo();
+                } else {
+                    const intentosRestantes = INTENTOS_MAXIMOS - intentosFallidos;
+                    mostrarAlertaError(`Usuario o contraseña incorrectos. (Te quedan ${intentosRestantes} intentos)`);
+                    loginBtn.innerText = textoOriginal;
+                    verificarFormulario(); 
+                }
+            }
+        }
+    </script>
+
+    <script type="module" src="../../src/js/app.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

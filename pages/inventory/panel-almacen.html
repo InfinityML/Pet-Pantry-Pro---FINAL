@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Almacén | Pet Pantry Pro</title>
+
+    <!-- Rutas exactas al Design System -->
+    <link rel="stylesheet" href="../../src/css/base/reset.css">
+    <link rel="stylesheet" href="../../src/css/base/variables.css">
+    <link rel="stylesheet" href="../../src/css/base/typography.css">
+    <link rel="stylesheet" href="../../src/css/layouts/app-layout.css">
+    <link rel="stylesheet" href="../../src/css/layouts/sidebar.css">
+    <link rel="stylesheet" href="../../src/css/layouts/topbar.css">
+
+    <!-- Componentes de UI -->
+    <link rel="stylesheet" href="../../src/css/components/cards.css">
+    <link rel="stylesheet" href="../../src/css/components/buttons.css">
+    <link rel="stylesheet" href="../../src/css/components/badges.css">
+    <link rel="stylesheet" href="../../src/css/components/tables.css">
+    <link rel="stylesheet" href="../../src/css/components/alerts.css">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+    <div class="app-wrapper">
+
+        <!-- SIDEBAR (Rol: Almacén) -->
+        <aside class="app-sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <i data-lucide="package" class="sidebar-brand" style="color: var(--color-primary-600);"></i>
+                <span class="sidebar-brand">Logística PetPantry</span>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-item">
+                    <!-- Modificado para cambiar de pestaña sin recargar -->
+                    <a href="#" class="nav-link active" id="menu-stock" onclick="cambiarPestana('stock')">
+                        <i data-lucide="boxes"></i> Control de Stock
+                    </a>
+                </div>
+                <!-- NUEVA OPCIÓN: RECEPCIÓN -->
+                <div class="nav-item">
+                    <a href="#" class="nav-link" id="menu-recepcion" onclick="cambiarPestana('recepcion')">
+                        <i data-lucide="package-plus"></i> Recepción de Ingresos
+                    </a>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../auth/login.html" class="nav-link text-danger">
+                    <i data-lucide="log-out"></i> Cerrar Sesión
+                </a>
+            </div>
+        </aside>
+
+        <!-- TOPBAR -->
+        <header class="app-topbar">
+            <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+                <i data-lucide="menu"></i>
+            </button>
+            <div class="user-profile">
+                <div class="user-info">
+                    <span class="user-name">Marcos Peña</span>
+                    <span class="user-role">Jefe de Almacén</span>
+                </div>
+                <div class="user-avatar" style="background: #fef3c7; color: #d97706;">MP</div>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT -->
+        <main class="app-main">
+            <div class="content-area">
+
+                <!-- ==========================================
+                     PESTAÑA 1: CONTROL DE STOCK (Original)
+                     ========================================== -->
+                <section id="sec-stock" class="dashboard-section">
+                    <header style="margin-bottom: var(--space-6);">
+                        <h1>Panel de Inventario</h1>
+                        <p class="text-muted">Gestiona el despacho de órdenes clínicas y controla el stock físico.</p>
+                    </header>
+
+                    <!-- ZONA DE ALERTAS (Se inyectan desde JS cuando hay stock crítico) -->
+                    <div id="alerts-container"></div>
+
+                    <!-- RESUMEN DE STOCK POR FÁRMACO (Se inyecta desde JS) -->
+                    <div id="resumen-stock-container"
+                        style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-top: var(--space-4);">
+                    </div>
+
+                    <div
+                        style="display: grid; grid-template-columns: 1fr; gap: var(--space-8); margin-top: var(--space-6);">
+
+                        <!-- ÓRDENES PENDIENTES DE DESPACHO -->
+                        <div class="card">
+                            <div class="card-header" style="background: #fff7ed; border-bottom-color: #ffedd5;">
+                                <h3 class="card-title"
+                                    style="display:flex; align-items:center; gap:8px; color: var(--color-primary-700);">
+                                    <i data-lucide="clipboard-list"></i> Órdenes Clínicas por Despachar
+                                </h3>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Paciente</th>
+                                            <th>Fármaco / Insumo</th>
+                                            <th>Cant.</th>
+                                            <th>Tipo</th>
+                                            <th>Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabla-ordenes">
+                                        <!-- Renderizado vía JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- INVENTARIO ACTUAL -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Stock Actual en Farmacia</h3>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Producto</th>
+                                            <th>Lote</th>
+                                            <th>Vencimiento</th>
+                                            <th>Tipo</th>
+                                            <th>Stock Disponible</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabla-inventario">
+                                        <!-- Renderizado vía JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==========================================
+                     PESTAÑA 2: RECEPCIÓN DE INGRESOS (Nueva)
+                     ========================================== -->
+                <section id="sec-recepcion" class="dashboard-section" style="display: none;">
+                    <header style="margin-bottom: var(--space-6);">
+                        <h1>Recepción de Ingresos</h1>
+                        <p class="text-muted">Registra la entrada de nuevos lotes de fármacos o insumos al almacén.</p>
+                    </header>
+
+                    <!-- FORMULARIO DE INGRESO -->
+                    <div class="card" style="margin-bottom: var(--space-8);">
+                        <div class="card-header">
+                            <h3 class="card-title">Registrar Entrada de Mercadería</h3>
+                        </div>
+                        <div style="padding: 24px;">
+                            <form id="form-ingreso-mercaderia"
+                                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+
+                                <div class="form-group" style="display: flex; flex-direction: column; gap: 8px;">
+                                    <label style="font-weight: 600; color: #475569;">Nombre del Fármaco /
+                                        Producto</label>
+                                    <input type="text" id="ingreso-nombre"
+                                        style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;" required
+                                        placeholder="Ej. Amoxicilina 500mg">
+                                </div>
+
+                                <div class="form-group" style="display: flex; flex-direction: column; gap: 8px;">
+                                    <label style="font-weight: 600; color: #475569;">Número de Lote</label>
+                                    <input type="text" id="ingreso-lote"
+                                        style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;" required
+                                        placeholder="Ej. L-2024-A">
+                                </div>
+
+                                <div class="form-group" style="display: flex; flex-direction: column; gap: 8px;">
+                                    <label style="font-weight: 600; color: #475569;">Fecha de Vencimiento</label>
+                                    <input type="date" id="ingreso-vencimiento"
+                                        style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;" required>
+                                </div>
+
+                                <div class="form-group" style="display: flex; flex-direction: column; gap: 8px;">
+                                    <label style="font-weight: 600; color: #475569;">Cantidad Recibida</label>
+                                    <input type="number" id="ingreso-cantidad"
+                                        style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;" min="1"
+                                        required placeholder="Ej. 50">
+                                </div>
+
+                                <div class="form-group" style="display: flex; flex-direction: column; gap: 8px;">
+                                    <label style="font-weight: 600; color: #475569;">Proveedor</label>
+                                    <input type="text" id="ingreso-proveedor"
+                                        style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;" required
+                                        placeholder="Ej. Lab. VetAndina">
+                                </div>
+
+                                <div class="form-group" style="display: flex; flex-direction: column; gap: 8px;">
+                                    <label style="font-weight: 600; color: #475569;">Tipo de Stock</label>
+                                    <select id="ingreso-tipo"
+                                        style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;" required>
+                                        <option value="" disabled selected>Seleccione el tipo...</option>
+                                        <option value="COMERCIAL">Compra Comercial (Para Venta)</option>
+                                        <option value="SOCIAL">Fondo de Apoyo Social</option>
+                                    </select>
+                                </div>
+
+                                <div
+                                    style="grid-column: 1 / -1; display: flex; justify-content: flex-end; margin-top: 16px; border-top: 1px solid #e2e8f0; padding-top: 16px;">
+                                    <button type="submit" class="btn btn-primary"
+                                        style="background: var(--color-primary-600); color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                                        <i data-lucide="save" style="width: 18px;"></i> Generar Orden de Ingreso
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- HISTORIAL DE RECEPCIONES -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title" style="display:flex; align-items:center; gap:8px;">
+                                <i data-lucide="history"></i> Historial de Recepción
+                            </h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha Ingreso</th>
+                                        <th>Fármaco / Producto</th>
+                                        <th>Lote</th>
+                                        <th>Vencimiento</th>
+                                        <th>Proveedor</th>
+                                        <th>Cant.</th>
+                                        <th>Tipo</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla-historial-recepcion">
+                                    <tr>
+                                        <td colspan="8" style="text-align: center; color: #64748b; padding: 24px;">No se
+                                            han registrado ingresos el día de hoy.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    </div>
+
+    <script src="../../src/js/utils/toast.js"></script>
+    <!-- LOGICA INLINE PARA TABS Y RECEPCIÓN -->
+    <script>
+        // Función para cambiar de pestañas
+        function cambiarPestana(id) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.dashboard-section').forEach(sec => sec.style.display = 'none');
+            // Quitar clase activa de los menús
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+
+            // Mostrar la seleccionada
+            document.getElementById('sec-' + id).style.display = 'block';
+            document.getElementById('menu-' + id).classList.add('active');
+        }
+
+    </script>
+
+    <!-- ENLACES EXACTOS A LOS CONTROLADORES JS CON EL NUEVO NOMBRE -->
+    <script type="module" src="../../src/js/layouts/main-layout.js"></script>
+    <script type="module" src="../../src/js/pages/panel-almacen.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+
+</html>

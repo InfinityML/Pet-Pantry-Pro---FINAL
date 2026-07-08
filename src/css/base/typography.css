@@ -1,0 +1,58 @@
+/* ==========================================================================
+   TYPOGRAPHY
+   ========================================================================== */
+
+/* Importar fuente Inter desde Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 1rem; /* 16px base */
+  line-height: 1.5;
+}
+
+/* Jerarquía de Encabezados */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-slate-900);
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: var(--space-4);
+  letter-spacing: -0.025em; /* Un leve ajuste de espaciado da aspecto premium */
+}
+
+h1 { font-size: 2.5rem; font-weight: 700; } /* 40px */
+h2 { font-size: 2rem; }   /* 32px */
+h3 { font-size: 1.5rem; } /* 24px */
+h4 { font-size: 1.25rem; }/* 20px */
+h5 { font-size: 1rem; }   /* 16px */
+h6 { 
+  font-size: 0.875rem;    /* 14px */
+  text-transform: uppercase; 
+  letter-spacing: 0.05em; 
+  color: var(--color-slate-500);
+}
+
+/* Textos de apoyo */
+.text-small {
+  font-size: 0.875rem; /* 14px */
+  color: var(--color-slate-500);
+}
+
+.text-muted {
+  color: var(--color-slate-500);
+}
+
+.text-success {
+  color: var(--color-success-600);
+}
+
+/* Enlaces con estado hover */
+.link {
+  color: var(--color-primary-600);
+  font-weight: 500;
+  transition: color var(--transition-fast);
+}
+
+.link:hover {
+  color: var(--color-primary-700);
+}

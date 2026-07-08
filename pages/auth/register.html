@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Cuenta | Pet Pantry Pro</title>
+
+    <link rel="stylesheet" href="../../src/css/base/reset.css">
+    <link rel="stylesheet" href="../../src/css/base/variables.css">
+    <link rel="stylesheet" href="../../src/css/base/typography.css">
+    <link rel="stylesheet" href="../../src/css/components/forms.css">
+    <link rel="stylesheet" href="../../src/css/components/buttons.css">
+    <link rel="stylesheet" href="../../src/css/components/alerts.css">
+    <link rel="stylesheet" href="../../src/css/pages/auth.css">
+
+    <!-- Mismo CSS ultra-compacto que el login -->
+    <style>
+        .auth-form-section {
+            padding: 20px !important;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .auth-container {
+            max-width: 320px !important;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            margin-bottom: 12px !important;
+            font-size: 0.75rem !important;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 16px !important;
+        }
+
+        .auth-header .brand-icon-box {
+            margin: 0 auto 8px !important;
+            width: 36px !important;
+            height: 36px !important;
+        }
+
+        .auth-header h2 {
+            font-size: 1.25rem !important;
+            margin-bottom: 4px !important;
+        }
+
+        .auth-header p {
+            font-size: 0.75rem !important;
+            line-height: 1.2 !important;
+            max-width: 280px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 12px !important;
+        }
+
+        .form-label {
+            font-size: 0.75rem !important;
+            margin-bottom: 4px !important;
+        }
+
+        .form-control {
+            padding: 8px 10px 8px 32px !important;
+            font-size: 0.85rem !important;
+            height: 36px !important;
+        }
+
+        .input-group .input-icon {
+            width: 14px !important;
+            height: 14px !important;
+            left: 10px !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            position: absolute;
+        }
+
+        .form-check {
+            margin-bottom: 12px !important;
+            font-size: 0.75rem !important;
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+        }
+
+        .form-check input {
+            width: 14px !important;
+            height: 14px !important;
+            margin-top: 2px;
+        }
+
+        .btn {
+            padding: 8px 12px !important;
+            font-size: 0.85rem !important;
+            height: 38px !important;
+        }
+
+        .captcha-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 12px !important;
+            transform: scale(0.85);
+            transform-origin: center;
+            height: 65px;
+        }
+
+        .register-section {
+            text-align: center;
+            border-top: 1px solid var(--color-slate-200);
+            padding-top: 12px !important;
+            margin-top: 12px !important;
+        }
+
+        .register-section p {
+            font-size: 0.75rem !important;
+            margin-bottom: 8px !important;
+        }
+    </style>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit" async defer></script>
+</head>
+
+<body>
+
+    <main class="auth-layout">
+        <section class="auth-form-section">
+            <div class="auth-container">
+                <a href="login.html" class="back-link link">
+                    <i data-lucide="arrow-left" style="width: 14px; height: 14px;"></i> Volver a iniciar sesión
+                </a>
+
+                <div class="auth-header">
+                    <div class="brand-icon-box">
+                        <i data-lucide="user-plus"></i>
+                    </div>
+                    <h2>Crear Cuenta</h2>
+                    <p class="text-muted">PetPantryPro</p>
+                </div>
+
+                <!-- Alerta (error o éxito) -->
+                <div id="registerAlert"
+                    style="display: none; padding: 10px; border-radius: 6px; margin-bottom: 16px; align-items: center; gap: 8px; font-size: 0.8rem;">
+                    <i data-lucide="alert-circle" style="width: 16px; height: 16px; flex-shrink: 0;"></i>
+                    <span id="registerAlertText"></span>
+                </div>
+
+                <form id="registerForm" class="form-wrapper" novalidate onsubmit="registrarCliente(event)">
+
+                    <div class="form-group">
+                        <label for="nombre" class="form-label">Nombre completo</label>
+                        <div class="input-group">
+                            <i data-lucide="user" class="input-icon"></i>
+                            <input type="text" id="nombre" class="form-control" placeholder="Nombres Completos" required
+                                autocomplete="name">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="usuario" class="form-label">Usuario (puede ser tu correo)</label>
+                        <div class="input-group">
+                            <i data-lucide="circle-user" class="input-icon"></i>
+                            <input type="text" id="usuario" class="form-control" placeholder="Correo Electrónico"
+                                required autocomplete="username">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="form-label">Contraseña</label>
+                        <div class="input-group" style="position: relative;">
+                            <i data-lucide="key" class="input-icon"></i>
+                            <input type="password" id="password" class="form-control" placeholder="Mínimo 8 caracteres"
+                                required autocomplete="new-password" style="padding-right: 36px !important;">
+                            <button type="button" onclick="togglePassword('password','eye-icon-1')"
+                                style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--color-slate-500); padding: 4px; display: flex; align-items: center; justify-content: center;">
+                                <i data-lucide="eye" style="width: 16px; height: 16px;" id="eye-icon-1"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password2" class="form-label">Repetir contraseña</label>
+                        <div class="input-group" style="position: relative;">
+                            <i data-lucide="key" class="input-icon"></i>
+                            <input type="password" id="password2" class="form-control"
+                                placeholder="Repite tu contraseña" required autocomplete="new-password"
+                                style="padding-right: 36px !important;">
+                            <button type="button" onclick="togglePassword('password2','eye-icon-2')"
+                                style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--color-slate-500); padding: 4px; display: flex; align-items: center; justify-content: center;">
+                                <i data-lucide="eye" style="width: 16px; height: 16px;" id="eye-icon-2"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-check">
+                        <input type="checkbox" id="terms">
+                        <label for="terms">Acepto los términos y la política de privacidad.</label>
+                    </div>
+
+                    <div class="captcha-wrapper">
+                        <div id="recaptcha-register"></div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" id="registerBtn" class="btn btn-primary w-100">
+                            Crear mi cuenta
+                        </button>
+                    </div>
+                </form>
+
+                <div class="register-section">
+                    <p class="text-muted">¿Ya tienes una cuenta?</p>
+                    <a href="login.html" class="btn btn-outline w-100"
+                        style="border: 1.5px solid var(--color-primary-600); color: var(--color-primary-600); text-decoration: none; display: flex; justify-content: center; align-items: center;">
+                        Inicia sesión
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="auth-visual-section">
+            <div class="visual-content">
+                <blockquote>
+                    "Cada adopción y cada donación cambia una historia. Gracias por sumarte."
+                </blockquote>
+                <p>- Equipo Pet Pantry Pro</p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        function togglePassword(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (input.type === 'password') { input.type = 'text'; icon.setAttribute('data-lucide', 'eye-off'); }
+            else { input.type = 'password'; icon.setAttribute('data-lucide', 'eye'); }
+            lucide.createIcons();
+        }
+
+        function onRecaptchaLoad() {
+            grecaptcha.render('recaptcha-register', {
+                'sitekey': '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
+            });
+        }
+
+        function mostrarAlerta(mensaje, tipo) {
+            const box = document.getElementById('registerAlert');
+            const text = document.getElementById('registerAlertText');
+            const ok = tipo === 'success';
+            box.style.backgroundColor = ok ? '#dcfce7' : '#fee2e2';
+            box.style.border = ok ? '1px solid #22c55e' : '1px solid #ef4444';
+            box.style.color = ok ? '#15803d' : '#b91c1c';
+            text.innerText = mensaje;
+            box.style.display = 'flex';
+        }
+
+        // REGISTRO OFFLINE usa la base de datos localStorage
+        
+        function registrarCliente(event) {
+            event.preventDefault();
+
+            const nombre = document.getElementById('nombre').value.trim();
+            const usuario = document.getElementById('usuario').value.trim();
+            const password = document.getElementById('password').value;
+            const password2 = document.getElementById('password2').value;
+            const terms = document.getElementById('terms').checked;
+            const btn = document.getElementById('registerBtn');
+
+            if (!nombre || !usuario || !password) return mostrarAlerta('Completa todos los campos.', 'error');
+            if (password.length < 8) return mostrarAlerta('La contraseña debe tener al menos 8 caracteres.', 'error');
+            if (password !== password2) return mostrarAlerta('Las contraseñas no coinciden.', 'error');
+            if (!terms) return mostrarAlerta('Debes aceptar los términos.', 'error');
+            if (typeof grecaptcha !== 'undefined' && grecaptcha.getResponse() === '') return mostrarAlerta('Confirma que no eres un robot.', 'error');
+
+            const textoOriginal = btn.innerText;
+            btn.innerText = 'Creando cuenta...';
+            btn.disabled = true;
+
+            const usuariosDB = JSON.parse(localStorage.getItem('usuarios')) || [];
+
+            if (usuariosDB.some(u => u.usuario === usuario)) {
+                mostrarAlerta('Ese correo/usuario ya está registrado.', 'error');
+                if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
+                btn.innerText = textoOriginal;
+                btn.disabled = false;
+                return;
+            }
+
+            usuariosDB.push({
+                id: Date.now(),
+                usuario: usuario,
+                password: password,
+                nombre: nombre,
+                rol: 'cliente',
+                telefono: '',
+                direccion: ''
+            });
+            localStorage.setItem('usuarios', JSON.stringify(usuariosDB));
+
+            mostrarAlerta('¡Cuenta creada! Redirigiendo al inicio de sesión...', 'success');
+            setTimeout(() => { window.location.href = 'login.html'; }, 1500);
+        }
+    </script>
+
+    <script type="module" src="../../src/js/app.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+
+</html>

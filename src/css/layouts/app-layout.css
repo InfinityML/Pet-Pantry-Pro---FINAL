@@ -1,0 +1,46 @@
+/* ==========================================================================
+   LAYOUT: MASTER APP SHELL (CSS GRID)
+   ========================================================================== */
+
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Área principal de contenido (Mobile por defecto) */
+.app-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: var(--space-4);
+  margin-top: 60px; /* Espacio para el topbar móvil */
+}
+
+/* Área interna donde viven las tarjetas y tablas */
+.content-area {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* --- Media Query para Escritorio (Desktop) --- */
+@media (min-width: 1024px) {
+  .app-wrapper {
+    display: grid;
+    grid-template-columns: 260px 1fr; /* 260px para el Sidebar, el resto para el Main */
+    grid-template-rows: 70px 1fr; /* 70px para el Topbar */
+    grid-template-areas: 
+      "sidebar topbar"
+      "sidebar main";
+  }
+
+  .app-main {
+    grid-area: main;
+    margin-top: 0;
+    padding: var(--space-8);
+    overflow-y: auto;
+    height: calc(100vh - 70px);
+  }
+}
